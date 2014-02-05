@@ -1,17 +1,35 @@
 package com.ucr.bravo.blackops;
 
+import android.app.ProgressDialog;
+import android.content.IntentSender;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
+import android.widget.Toast;
 
-public class MainActivity extends ActionBarActivity {
+import com.google.android.gms.common.*;
+import com.google.android.gms.common.GooglePlayServicesClient.*;
+import com.google.android.gms.plus.PlusClient;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallbacks;
+import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
+
+public class MainActivity extends ActionBarActivity  implements View.OnClickListener,
+        ConnectionCallbacks, OnConnectionFailedListener{
+
+    private static final int REQUEST_CODE_RESOLVE_ERR = 9000;
+    private ProgressDialog mConnectionProgressDialog;
+    private PlusClient mPlusClient;
+    private ConnectionResult mConnectionResult;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +41,14 @@ public class MainActivity extends ActionBarActivity {
                     .add(R.id.container, new PlaceholderFragment())
                     .commit();
         }
+        mPlusClient = new PlusClient.Builder(this, this, this)
+                .setActions("http://schemas.google.com/AddActivity", "http://schemas.google.com/BuyActivity")
+                .setScopes(Scopes.PLUS_LOGIN)  // recommended login scope for social features
+                        // .setScopes("profile")       // alternative basic login scope
+                .build();
+        // Progress bar to be displayed if the connection failure is not resolved.
+        mConnectionProgressDialog = new ProgressDialog(this);
+        mConnectionProgressDialog.setMessage("Signing in...");
     }
 
 
@@ -44,6 +70,66 @@ public class MainActivity extends ActionBarActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult result) {
+        if (mConnectionProgressDialog.isShowing()) {
+            // The user clicked the sign-in button already. Start to resolve
+            // connection errors. Wait until onConnected() to dismiss the
+            // connection dialog.
+            if (result.hasResolution()) {
+                try {
+                    result.startResolutionForResult(this, REQUEST_CODE_RESOLVE_ERR);
+                } catch (IntentSender.SendIntentException e) {
+                    mPlusClient.connect();
+                }
+            }
+        }
+        // Save the result and resolve the connection failure upon a user click.
+        mConnectionResult = result;
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mPlusClient.connect();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mPlusClient.disconnect();
+    }
+
+    @Override
+    public void onConnected(Bundle connectionHint) {
+        mConnectionProgressDialog.dismiss();
+        Toast.makeText(this, "User is connected!", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onDisconnected() {
+    //    Log.d(TAG, "disconnected");
+    }
+
+    @Override
+    public void onClick(View view)
+    {
+        if (view.getId() == R.id.sign_in_button && !mPlusClient.isConnected()) {
+            if (mConnectionResult == null) {
+                mConnectionProgressDialog.show();
+            } else {
+                try {
+                    mConnectionResult.startResolutionForResult(this, REQUEST_CODE_RESOLVE_ERR);
+                } catch (IntentSender.SendIntentException e) {
+                    // Try connecting again.
+                    mConnectionResult = null;
+                    mPlusClient.connect();
+                }
+            }
+        }
+
     }
 
     /**
