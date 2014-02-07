@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -16,8 +15,9 @@ import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.plus.PlusClient;
-import com.ucr.bravo.blackops.AccessRequestActivity;
 import com.ucr.bravo.blackops.R;
+import com.ucr.bravo.blackops.activities.AccessRequestActivity;
+import com.ucr.bravo.blackops.activities.MainActivity;
 
 /**
  * Created by cedric on 2/6/14.
@@ -31,7 +31,7 @@ public class GPlusLoginFragment extends Fragment implements
     private PlusClient mPlusClient;
     private ConnectionResult mConnectionResult;
     private View rootView;
-    public final static String EXTRA_MESSAGE = "com.ucr.bravo.blackops.MESSAGE";
+
 
     public GPlusLoginFragment() {
     }
@@ -56,7 +56,8 @@ public class GPlusLoginFragment extends Fragment implements
             @Override
             public void onClick(View view)
             {
-                if (view.getId() == R.id.sign_in_button && !mPlusClient.isConnected()) {
+                if (view.getId() == R.id.sign_in_button && !mPlusClient.isConnected())
+                {
                     if (mConnectionResult == null) {
                         mConnectionProgressDialog.show();
                     } else {
@@ -110,6 +111,7 @@ public class GPlusLoginFragment extends Fragment implements
         mConnectionProgressDialog.dismiss();
 
         Toast.makeText(getActivity(), mPlusClient.getAccountName(), Toast.LENGTH_LONG).show();
+        sendRegistrationData();
     }
 
     @Override
@@ -117,12 +119,11 @@ public class GPlusLoginFragment extends Fragment implements
         //  Log.d(TAG, "disconnected");
     }
 
-    public void sendMessage(View view) {
-        Intent intent = new Intent(this, AccessRequestActivity.class);
-        EditText editText = (EditText) rootView.findViewById(R.id.emailEditText);
-        String message = editText.getText().toString();
-        intent.putExtra(EXTRA_MESSAGE, message);
-
+    public void sendRegistrationData() {
+        Intent intent = new Intent(getActivity(), AccessRequestActivity.class);
+        String message = mPlusClient.getAccountName();
+        intent.putExtra(((MainActivity) getActivity()).EXTRA_MESSAGE, message);
+        startActivity(intent);
     }
 
 }
