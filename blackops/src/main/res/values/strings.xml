@@ -9,5 +9,5 @@
     <string name="ingress_ign">Ingress IGN:</string>
     <string name="request_access">Request Access</string>
     <string name="default_email">you@email.com</string>
-
+    <string name="base_url"></string>
 </resources>

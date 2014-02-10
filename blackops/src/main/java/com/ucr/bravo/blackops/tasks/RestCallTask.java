@@ -13,24 +13,16 @@ import java.net.URL;
 /**
  * Created by cedric on 2/7/14.
  */
-public class RestCallTask extends AsyncTask<String, Void, String>
+public abstract class RestCallTask extends AsyncTask<String, Void, String>
 {
-    @Override
-    protected String doInBackground(String... urls) {
 
-        // params comes from the execute() call: params[0] is the url.
-        try {
-            return callRest(urls[0]);
-        } catch (IOException e) {
-            return "Unable to retrieve web page. URL may be invalid.";
-        }
-    }
     // onPostExecute displays the results of the AsyncTask.
     @Override
     protected void onPostExecute(String result) {
+        super.onPostExecute(result);
        // textView.setText(result);
     }
-    private String callRest(String myurl) throws IOException {
+    protected String callRest(String myurl, String getPost) throws IOException {
         InputStream is = null;
         // Only display the first 500 characters of the retrieved
         // web page content.
@@ -41,7 +33,7 @@ public class RestCallTask extends AsyncTask<String, Void, String>
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setReadTimeout(10000 /* milliseconds */);
             conn.setConnectTimeout(15000 /* milliseconds */);
-            conn.setRequestMethod("GET");
+            conn.setRequestMethod(getPost);
             conn.setDoInput(true);
             // Starts the query
             conn.connect();
