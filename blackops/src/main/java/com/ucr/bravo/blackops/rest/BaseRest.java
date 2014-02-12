@@ -9,17 +9,29 @@ import com.ucr.bravo.blackops.tasks.PostRestCallTask;
 public class BaseRest
 {
 
-    protected final static String BASE_URL = "http://donkeigy.endofinternet.net/BlackOpsRestWeb/rest";
-    protected static String REQUEST_SECTION;
+    protected final static String BASE_URL = "http://donkeigy.endofinternet.net:18077/BlackOpsRestWeb/rest";
+    private String requestSection;
 
-
-    protected static void executePostCall(String endpoint)
+    public BaseRest(String requestSection)
     {
-        new PostRestCallTask().execute(BASE_URL + REQUEST_SECTION + endpoint);
+        this.requestSection = requestSection;
     }
-    protected static void executeGetCall(String endpoint)
+
+    public String getRequestSection() {
+        return requestSection;
+    }
+
+    public void setRequestSection(String requestSection) {
+        this.requestSection = requestSection;
+    }
+
+    public void executePostCall(String endpoint, BaseRestPostAction baseRestPostAction, String jsonParamsString)
     {
-        new GetRestCallTask().execute(BASE_URL + REQUEST_SECTION + endpoint);
+        new PostRestCallTask(baseRestPostAction, jsonParamsString ).execute(BASE_URL + requestSection + endpoint);
+    }
+    public void executeGetCall(String endpoint, BaseRestPostAction baseRestPostAction)
+    {
+        new GetRestCallTask(baseRestPostAction).execute(BASE_URL + requestSection + endpoint);
     }
 
 }

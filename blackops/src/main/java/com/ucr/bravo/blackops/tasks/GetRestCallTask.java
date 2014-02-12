@@ -1,5 +1,7 @@
 package com.ucr.bravo.blackops.tasks;
 
+import com.ucr.bravo.blackops.rest.BaseRestPostAction;
+
 import java.io.IOException;
 
 /**
@@ -7,6 +9,10 @@ import java.io.IOException;
  */
 public class GetRestCallTask extends RestCallTask
 {
+    public GetRestCallTask(BaseRestPostAction baseRestPostAction) {
+        super(baseRestPostAction);
+    }
+
     @Override
     protected String doInBackground(String... urls) {
         // params comes from the execute() call: params[0] is the url.

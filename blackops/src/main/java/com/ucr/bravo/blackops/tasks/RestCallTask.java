@@ -2,6 +2,9 @@ package com.ucr.bravo.blackops.tasks;
 
 import android.os.AsyncTask;
 
+import com.ucr.bravo.blackops.rest.BaseRestPostAction;
+
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -15,14 +18,21 @@ import java.net.URL;
  */
 public abstract class RestCallTask extends AsyncTask<String, Void, String>
 {
+    private final BaseRestPostAction baseRestPostAction;
 
-    // onPostExecute displays the results of the AsyncTask.
-    @Override
-    protected void onPostExecute(String result) {
-        super.onPostExecute(result);
-       // textView.setText(result);
+
+    protected RestCallTask(BaseRestPostAction baseRestPostAction)
+    {
+        this.baseRestPostAction = baseRestPostAction;
     }
-    protected String callRest(String myurl, String getPost) throws IOException {
+
+    protected String callRest(String myurl, String getPost) throws IOException
+    {
+        return callRest(myurl, getPost, null);
+    }
+
+
+    protected String callRest(String myurl, String getPost, String jsonParamsString) throws IOException {
         InputStream is = null;
         // Only display the first 500 characters of the retrieved
         // web page content.
@@ -31,10 +41,20 @@ public abstract class RestCallTask extends AsyncTask<String, Void, String>
         try {
             URL url = new URL(myurl);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestProperty("Content-Type","application/json");
             conn.setReadTimeout(10000 /* milliseconds */);
             conn.setConnectTimeout(15000 /* milliseconds */);
             conn.setRequestMethod(getPost);
             conn.setDoInput(true);
+
+            if(getPost.equals("POST") && jsonParamsString != null)
+            {
+                conn.setDoOutput(true);
+                DataOutputStream outputStream = new DataOutputStream(conn.getOutputStream());
+                outputStream.writeBytes(jsonParamsString);
+                outputStream.flush();
+                outputStream.close();
+            }
             // Starts the query
             conn.connect();
             int response = conn.getResponseCode();
@@ -59,6 +79,11 @@ public abstract class RestCallTask extends AsyncTask<String, Void, String>
         char[] buffer = new char[len];
         reader.read(buffer);
         return new String(buffer);
+    }
+    @Override
+    protected void onPostExecute(String result)
+    {
+        baseRestPostAction.onPostExecution(result);
     }
 }
 
