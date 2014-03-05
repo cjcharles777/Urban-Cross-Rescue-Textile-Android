@@ -1,13 +1,17 @@
 package com.ucr.bravo.blackops.fragments;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -18,6 +22,10 @@ import com.google.android.gms.plus.PlusClient;
 import com.ucr.bravo.blackops.R;
 import com.ucr.bravo.blackops.activities.AccessRequestActivity;
 import com.ucr.bravo.blackops.activities.MainActivity;
+import com.ucr.bravo.blackops.rest.BaseRestPostAction;
+import com.ucr.bravo.blackops.rest.object.Agent;
+import com.ucr.bravo.blackops.rest.object.response.BaseResponse;
+import com.ucr.bravo.blackops.rest.service.AgentService;
 
 /**
  * Created by cedric on 2/6/14.
@@ -120,10 +128,63 @@ public class GPlusLoginFragment extends Fragment implements
     }
 
     public void sendRegistrationData() {
-        Intent intent = new Intent(getActivity(), AccessRequestActivity.class);
-        String message = mPlusClient.getAccountName();
-        intent.putExtra(((MainActivity) getActivity()).EXTRA_MESSAGE, message);
-        startActivity(intent);
+        final String email = mPlusClient.getAccountName();
+        AgentService agentService = new AgentService();
+        ConnectivityManager connMgr = (ConnectivityManager)
+                getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnected())
+        {
+
+            final Agent agent = new Agent();
+            agent.setEmail(email);
+            BaseRestPostAction baseRestPostAction = new BaseRestPostAction()
+            {
+                @Override
+                public void onPostExecution(String str)
+                {
+                    BaseResponse response = convertToResponse(str);
+                    if(response.getResult().equals("SUCCESS"))
+                    {
+
+                        Agent responseAgent = (Agent) convertMessageToObject(response.getMessage(), Agent.class);
+                        if(responseAgent.getAuthorized())
+                        {
+                            Toast.makeText(getActivity(), responseAgent.getId(), Toast.LENGTH_LONG).show();
+                            //Todo: Go to start page
+                        }
+                        else
+                        {
+                            //Todo: Go to please wait for authentication page
+                        }
+
+                    }
+                    else
+                    {
+                        String resultMessage = (String) response.getMessage();
+                        if(resultMessage.equals("Invalid Agent Email"))
+                        {
+                            Intent intent = new Intent(getActivity(), AccessRequestActivity.class);
+                            String message = email;
+                            intent.putExtra(((MainActivity) getActivity()).EXTRA_MESSAGE, message);
+                            startActivity(intent);
+
+                        }
+                        else
+                        {
+                            //Todo: Add Error Message handling here
+                        }
+                    }
+                }
+            };
+            agentService.retrieveAgentByEmail(baseRestPostAction, agent);
+        }
+        else
+        {
+            //Todo: Add Error Message handling here
+        }
+
+
     }
 
 }

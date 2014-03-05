@@ -9,7 +9,7 @@ import com.ucr.bravo.blackops.tasks.PostRestCallTask;
 public class BaseRest
 {
 
-    protected final static String BASE_URL = "http://donkeigy.endofinternet.net:18077/BlackOpsRestWeb/rest";
+    protected final static String BASE_URL = "http://donkeigy.endofinternet.net:18077/black-ops/rest";
     private String requestSection;
 
     public BaseRest(String requestSection)

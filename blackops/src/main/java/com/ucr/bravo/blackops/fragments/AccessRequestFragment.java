@@ -13,10 +13,12 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.ucr.bravo.blackops.R;
 import com.ucr.bravo.blackops.activities.MainActivity;
 import com.ucr.bravo.blackops.rest.BaseRestPostAction;
 import com.ucr.bravo.blackops.rest.object.Agent;
+import com.ucr.bravo.blackops.rest.object.response.BaseResponse;
 import com.ucr.bravo.blackops.rest.service.AgentService;
 
 /**
@@ -56,6 +58,7 @@ public class AccessRequestFragment extends Fragment
                         @Override
                         public void onPostExecution(String str) {
                             Toast.makeText(getActivity(), str, Toast.LENGTH_LONG).show();
+
                         }
                     };
                     agentService.requestAuthorization(baseRestPostAction, agent);

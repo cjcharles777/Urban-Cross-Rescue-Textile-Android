@@ -7,6 +7,9 @@ public class Agent
 {
     private String ign;
     private String email;
+    private String id;
+    private Boolean authorized;
+    private Integer clearance;
 
     public String getIgn() {
         return ign;
@@ -22,5 +25,29 @@ public class Agent
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public Boolean getAuthorized() {
+        return authorized;
+    }
+
+    public void setAuthorized(Boolean authorized) {
+        this.authorized = authorized;
+    }
+
+    public Integer getClearance() {
+        return clearance;
+    }
+
+    public void setClearance(Integer clearance) {
+        this.clearance = clearance;
     }
 }
