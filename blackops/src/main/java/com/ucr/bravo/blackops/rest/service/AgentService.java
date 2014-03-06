@@ -1,7 +1,7 @@
 package com.ucr.bravo.blackops.rest.service;
 
 import com.google.gson.Gson;
-import com.ucr.bravo.blackops.rest.BaseRest;
+import com.ucr.bravo.blackops.rest.BaseRestService;
 import com.ucr.bravo.blackops.rest.BaseRestPostAction;
 import com.ucr.bravo.blackops.rest.object.Agent;
 import com.ucr.bravo.blackops.rest.object.request.BaseRequest;
@@ -9,7 +9,7 @@ import com.ucr.bravo.blackops.rest.object.request.BaseRequest;
 /**
  * Created by cedric on 2/10/14.
  */
-public class AgentService extends BaseRest
+public class AgentService extends BaseRestService
 {
     protected static String REQUEST_SECTION =  "/agent";
 

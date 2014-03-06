@@ -22,6 +22,7 @@ import com.google.android.gms.plus.PlusClient;
 import com.ucr.bravo.blackops.R;
 import com.ucr.bravo.blackops.activities.AccessRequestActivity;
 import com.ucr.bravo.blackops.activities.MainActivity;
+import com.ucr.bravo.blackops.activities.TargetListActivity;
 import com.ucr.bravo.blackops.rest.BaseRestPostAction;
 import com.ucr.bravo.blackops.rest.object.Agent;
 import com.ucr.bravo.blackops.rest.object.response.BaseResponse;
@@ -151,7 +152,9 @@ public class GPlusLoginFragment extends Fragment implements
                         if(responseAgent.getAuthorized())
                         {
                             Toast.makeText(getActivity(), responseAgent.getId(), Toast.LENGTH_LONG).show();
-                            //Todo: Go to start page
+                            Intent intent = new Intent(getActivity(), TargetListActivity.class);
+                           intent.putExtra(((MainActivity) getActivity()).AUTHORIZED_AGENT, responseAgent);
+                            startActivity(intent);
                         }
                         else
                         {

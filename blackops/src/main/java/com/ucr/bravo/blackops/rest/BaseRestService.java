@@ -6,13 +6,13 @@ import com.ucr.bravo.blackops.tasks.PostRestCallTask;
 /**
  * Created by cedric on 2/10/14.
  */
-public class BaseRest
+public class BaseRestService
 {
 
     protected final static String BASE_URL = "http://donkeigy.endofinternet.net:18077/black-ops/rest";
     private String requestSection;
 
-    public BaseRest(String requestSection)
+    public BaseRestService(String requestSection)
     {
         this.requestSection = requestSection;
     }

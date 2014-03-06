@@ -1,30 +1,33 @@
 package com.ucr.bravo.blackops.activities;
 
-import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.ActionBar;
+import android.support.v4.app.Fragment;
+import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.os.Build;
 
 import com.ucr.bravo.blackops.R;
-import com.ucr.bravo.blackops.fragments.GPlusLoginFragment;
+import com.ucr.bravo.blackops.fragments.TargetListFragment;
 
-public class MainActivity extends ActionBarActivity  {
+public class TargetListActivity extends ActionBarActivity {
 
-    public final static String EXTRA_MESSAGE = "com.ucr.bravo.blackops.MESSAGE";
-    public final static String AUTHORIZED_AGENT = "com.ucr.bravo.blackops.AUTHORIZEDAGENT";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_target_list);
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new GPlusLoginFragment())
+                    .add(R.id.container, new TargetListFragment())
                     .commit();
         }
-
-
     }
 
 
@@ -32,7 +35,7 @@ public class MainActivity extends ActionBarActivity  {
     public boolean onCreateOptionsMenu(Menu menu) {
         
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.target_list, menu);
         return true;
     }
 
@@ -48,6 +51,20 @@ public class MainActivity extends ActionBarActivity  {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * A placeholder fragment containing a simple view.
+     */
+    public static class PlaceholderFragment extends Fragment {
 
+        public PlaceholderFragment() {
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                Bundle savedInstanceState) {
+            View rootView = inflater.inflate(R.layout.fragment_target_list, container, false);
+            return rootView;
+        }
+    }
 
 }

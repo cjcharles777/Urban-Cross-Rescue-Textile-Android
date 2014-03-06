@@ -1,9 +1,11 @@
 package com.ucr.bravo.blackops.rest.object;
 
+import java.io.Serializable;
+
 /**
  * Created by cedric on 2/12/14.
  */
-public class Agent
+public class Agent implements Serializable
 {
     private String ign;
     private String email;

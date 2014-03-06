@@ -10,4 +10,6 @@
     <string name="request_access">Request Access</string>
     <string name="default_email">you@email.com</string>
     <string name="base_url"></string>
+    <string name="title_activity_target_list">TargetListActivity</string>
+
 </resources>
