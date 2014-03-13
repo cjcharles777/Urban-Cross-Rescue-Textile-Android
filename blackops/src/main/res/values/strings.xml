@@ -11,5 +11,7 @@
     <string name="default_email">you@email.com</string>
     <string name="base_url"></string>
     <string name="title_activity_target_list">TargetListActivity</string>
+    <string name="submit_target">Submit Target</string>
+    <string name="title_activity_target_submission">Target Submission Activity</string>
 
 </resources>

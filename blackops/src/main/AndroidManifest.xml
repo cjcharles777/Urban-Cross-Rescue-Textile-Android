@@ -29,8 +29,12 @@
                 android:value="com.ucr.bravo.blackops.MainActivity" />
         </activity>
         <activity
-            android:name=".activities.TargetListActivity"
+            android:name="com.ucr.bravo.blackops.activities.TargetListActivity"
             android:label="@string/title_activity_target_list" >
+        </activity>
+        <activity
+            android:name="com.ucr.bravo.blackops.activities.TargetSubmissionActivity"
+            android:label="@string/title_activity_target_submission" >
         </activity>
     </application>
 

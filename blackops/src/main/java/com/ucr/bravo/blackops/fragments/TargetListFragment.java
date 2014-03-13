@@ -2,18 +2,14 @@ package com.ucr.bravo.blackops.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.ucr.bravo.blackops.R;
 import com.ucr.bravo.blackops.activities.MainActivity;
-import com.ucr.bravo.blackops.activities.TargetListActivity;
 import com.ucr.bravo.blackops.adapters.TargetListArrayAdapter;
 import com.ucr.bravo.blackops.rest.BaseRestPostAction;
 import com.ucr.bravo.blackops.rest.object.Agent;
@@ -21,9 +17,6 @@ import com.ucr.bravo.blackops.rest.object.Target;
 import com.ucr.bravo.blackops.rest.object.response.BaseResponse;
 import com.ucr.bravo.blackops.rest.service.TargetService;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -43,7 +36,7 @@ public class TargetListFragment extends ListFragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        View rootView = inflater.inflate(R.layout.fragment_target_list, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_target_table, container, false);
 
         listView = (ListView) rootView.findViewById(android.R.id.list);
         targetService = new TargetService();

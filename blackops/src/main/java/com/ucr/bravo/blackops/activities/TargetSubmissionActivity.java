@@ -1,7 +1,7 @@
 package com.ucr.bravo.blackops.activities;
 
-import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,22 +9,20 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.os.Build;
 
 import com.ucr.bravo.blackops.R;
-import com.ucr.bravo.blackops.fragments.TargetListFragment;
 
-public class TargetListActivity extends ActionBarActivity {
-
-
+public class TargetSubmissionActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_target_list);
+        setContentView(R.layout.activity_target_submission);
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new TargetListFragment())
+                    .add(R.id.container, new PlaceholderFragment())
                     .commit();
         }
     }
@@ -34,33 +32,20 @@ public class TargetListActivity extends ActionBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.target_list, menu);
+        getMenuInflater().inflate(R.menu.target_submission, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
+    public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        switch(item.getItemId())
-        {
-            case R.id.action_settings:
-                 return true;
-            case R.id.action_submit:
-                openPortalSubmit();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            return true;
         }
-
-    }
-
-    private void openPortalSubmit()
-    {
-        Intent intent = new Intent(this, TargetSubmissionActivity.class);
-        startActivity(intent);
+        return super.onOptionsItemSelected(item);
     }
 
     /**
@@ -74,7 +59,7 @@ public class TargetListActivity extends ActionBarActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_target_table, container, false);
+            View rootView = inflater.inflate(R.layout.fragment_target_submission, container, false);
             return rootView;
         }
     }
