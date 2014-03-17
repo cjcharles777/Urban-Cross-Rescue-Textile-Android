@@ -2,11 +2,13 @@ package com.ucr.bravo.blackops.rest;
 
 import com.ucr.bravo.blackops.rest.object.RestCallObject;
 
+import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.io.StringWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -51,7 +53,7 @@ public class RestCallAction
             is = conn.getInputStream();
 
             // Convert the InputStream into a string
-            String contentAsString = readIt(is, len);
+            String contentAsString = readIt(is);
             return contentAsString;
 
             // Makes sure that the InputStream is closed after the app is
@@ -63,12 +65,15 @@ public class RestCallAction
         }
 
     }
-    private static String readIt(InputStream stream, int len) throws IOException
+    private static String readIt(InputStream stream) throws IOException
     {
-        Reader reader = null;
-        reader = new InputStreamReader(stream, "UTF-8");
-        char[] buffer = new char[len];
-        reader.read(buffer);
-        return new String(buffer);
+        BufferedReader br = null;
+        StringBuilder sb = new StringBuilder();
+        br = new BufferedReader(new InputStreamReader(stream));
+        String line;
+        while ((line = br.readLine()) != null) {
+            sb.append(line);
+        }
+        return sb.toString();
     }
 }

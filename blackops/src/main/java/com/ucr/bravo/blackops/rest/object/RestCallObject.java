@@ -10,7 +10,7 @@ public class RestCallObject
     String jsonParamsString;
     protected final static String BASE_URL = "http://donkeigy.endofinternet.net:18077/black-ops/rest";
 
-    public RestCallObject(String getPost, String extension, String jsonParamsString)
+    public RestCallObject( String extension, String getPost, String jsonParamsString)
     {
         this.getPost = getPost;
         this.extension = BASE_URL + extension;

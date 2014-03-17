@@ -1,21 +1,23 @@
 package com.ucr.bravo.blackops.rest.object.beans;
 
+import java.math.BigDecimal;
+
 /**
  * Created by cedric on 3/5/14.
  */
 public class Portal
 {
-    private int id;
+    private String id;
     private String name;
     private String url;
-    private long latitude;
-    private long longitude;
+    private BigDecimal latitude;
+    private BigDecimal longitude;
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -35,19 +37,25 @@ public class Portal
         this.url = url;
     }
 
-    public long getLatitude() {
+    public BigDecimal getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(long latitude) {
+    public void setLatitude(BigDecimal latitude) {
         this.latitude = latitude;
     }
 
-    public long getLongitude() {
+    public BigDecimal getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(long longitude) {
+    public void setLongitude(BigDecimal longitude) {
         this.longitude = longitude;
+    }
+
+    @Override
+    public String toString()
+    {
+        return name;
     }
 }

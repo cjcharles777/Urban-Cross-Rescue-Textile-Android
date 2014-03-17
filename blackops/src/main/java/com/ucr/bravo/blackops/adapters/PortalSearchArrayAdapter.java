@@ -1,15 +1,19 @@
 package com.ucr.bravo.blackops.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.ucr.bravo.blackops.filters.PortalAjaxFilter;
 import com.ucr.bravo.blackops.rest.object.beans.Portal;
+import com.ucr.bravo.blackops.rest.object.beans.Target;
 import com.ucr.bravo.blackops.rest.object.response.BaseResponse;
 import com.ucr.bravo.blackops.rest.utils.JsonResponseConversionUtil;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,9 +25,9 @@ public class PortalSearchArrayAdapter extends ArrayAdapter<Portal>
 
     private List<Portal> listObj;
     private String requesterId;
-    public PortalSearchArrayAdapter(Context context, int resource, String requesterId)
+    public PortalSearchArrayAdapter(Activity context, String requesterId)
     {
-        super(context, resource);
+        super(context, android.R.layout.simple_dropdown_item_1line);
         listObj = new ArrayList<Portal>();
         this.requesterId = requesterId;
     }
@@ -44,17 +48,22 @@ public class PortalSearchArrayAdapter extends ArrayAdapter<Portal>
             new PortalAjaxFilter(requesterId)
             {
 
-
                 @Override
                 public FilterResults convertJsonResultsToFilterResults(String json)
                 {
+                    FilterResults filterResults = new FilterResults();
                     listObj.clear();
                     BaseResponse<List> response = JsonResponseConversionUtil.convertToResponse(json);
-                    if(response.getResult() != null)
+                    if(response.getResult() != null && response.getResult().equals("SUCCESS"))
                     {
-                        //TODO: Finish this here!!!!
+                        Type listType = new TypeToken<ArrayList<Portal>>() {}.getType();
+                        List searchResults = (List<Portal>) JsonResponseConversionUtil.convertMessageToObject(response.getMessage(), listType);
+                        listObj = searchResults;
+                        filterResults.values = searchResults;
+                        filterResults.count = searchResults.size();
+
                     }
-                    return null;
+                    return filterResults;
                 }
 
                 @Override

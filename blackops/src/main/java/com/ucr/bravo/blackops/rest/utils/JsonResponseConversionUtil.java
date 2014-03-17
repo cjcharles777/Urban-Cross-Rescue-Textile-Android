@@ -5,6 +5,7 @@ import com.google.gson.stream.JsonReader;
 import com.ucr.bravo.blackops.rest.object.response.BaseResponse;
 
 import java.io.StringReader;
+import java.lang.reflect.Type;
 
 /**
  * Created by cedric on 3/14/14.
@@ -20,6 +21,13 @@ public class JsonResponseConversionUtil
         return response;
     }
     public static Object convertMessageToObject(Object o, Class c)
+    {
+        Gson gson = new Gson();
+        String json = gson.toJson(o);
+        Object response = gson.fromJson(json, c);
+        return response;
+    }
+    public static Object convertMessageToObject(Object o, Type c)
     {
         Gson gson = new Gson();
         String json = gson.toJson(o);

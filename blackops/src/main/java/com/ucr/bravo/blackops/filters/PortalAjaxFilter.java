@@ -38,7 +38,7 @@ public abstract class PortalAjaxFilter extends BaseAjaxFilter
                 portal.setName(constraint.toString());
                 Gson gson = new Gson();
                 String json = gson.toJson(new BaseRequest<Portal>(requesterId, portal));
-                RestCallObject restCall = new RestCallObject("POST",PORTAL_SEARCH_EXTENSION,json);
+                RestCallObject restCall = new RestCallObject(PORTAL_SEARCH_EXTENSION,"POST",json);
 
                 String jsonResults = RestCallAction.executeRestCall(restCall);
                 return  convertJsonResultsToFilterResults(jsonResults);

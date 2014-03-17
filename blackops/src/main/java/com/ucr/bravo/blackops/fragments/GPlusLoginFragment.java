@@ -18,6 +18,7 @@ import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.plus.PlusClient;
+import com.ucr.bravo.blackops.BlackOpsApplication;
 import com.ucr.bravo.blackops.R;
 import com.ucr.bravo.blackops.activities.AccessRequestActivity;
 import com.ucr.bravo.blackops.activities.MainActivity;
@@ -26,6 +27,7 @@ import com.ucr.bravo.blackops.rest.BaseRestPostAction;
 import com.ucr.bravo.blackops.rest.object.beans.Agent;
 import com.ucr.bravo.blackops.rest.object.response.BaseResponse;
 import com.ucr.bravo.blackops.rest.service.AgentService;
+import com.ucr.bravo.blackops.rest.utils.JsonResponseConversionUtil;
 
 /**
  * Created by cedric on 2/6/14.
@@ -143,17 +145,18 @@ public class GPlusLoginFragment extends Fragment implements
                 @Override
                 public void onPostExecution(String str)
                 {
-                    BaseResponse response = convertToResponse(str);
+                    BaseResponse response = JsonResponseConversionUtil.convertToResponse(str);
                     if(response.getResult().equals("SUCCESS"))
                     {
 
-                        Agent responseAgent = (Agent) convertMessageToObject(response.getMessage(), Agent.class);
+                        Agent responseAgent = (Agent) JsonResponseConversionUtil.convertMessageToObject(response.getMessage(), Agent.class);
                         if(responseAgent.getAuthorized())
                         {
                             Toast.makeText(getActivity(), responseAgent.getId(), Toast.LENGTH_LONG).show();
+                            ((BlackOpsApplication) getActivity().getApplication()).setSessionAgent(responseAgent);
                             Intent intent = new Intent(getActivity(), TargetListActivity.class);
-                           intent.putExtra(((MainActivity) getActivity()).AUTHORIZED_AGENT, responseAgent);
                             startActivity(intent);
+
                         }
                         else
                         {

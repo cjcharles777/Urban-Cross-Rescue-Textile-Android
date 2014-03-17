@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.ucr.bravo.blackops.BlackOpsApplication;
 import com.ucr.bravo.blackops.R;
 import com.ucr.bravo.blackops.activities.MainActivity;
 import com.ucr.bravo.blackops.adapters.TargetListArrayAdapter;
@@ -16,6 +17,7 @@ import com.ucr.bravo.blackops.rest.object.beans.Agent;
 import com.ucr.bravo.blackops.rest.object.beans.Target;
 import com.ucr.bravo.blackops.rest.object.response.BaseResponse;
 import com.ucr.bravo.blackops.rest.service.TargetService;
+import com.ucr.bravo.blackops.rest.utils.JsonResponseConversionUtil;
 
 import java.util.List;
 
@@ -40,8 +42,8 @@ public class TargetListFragment extends ListFragment
 
         listView = (ListView) rootView.findViewById(android.R.id.list);
         targetService = new TargetService();
-        Intent intent = getActivity().getIntent();
-        agent = (Agent) intent.getSerializableExtra(MainActivity.AUTHORIZED_AGENT);
+
+        agent = ((BlackOpsApplication) getActivity().getApplication()).getSessionAgent();
         return rootView;
     }
 
@@ -53,11 +55,11 @@ public class TargetListFragment extends ListFragment
         {
             @Override
             public void onPostExecution(String str) {
-                BaseResponse response = convertToResponse(str);
+                BaseResponse response = JsonResponseConversionUtil.convertToResponse(str);
                 if(response.getResult().equals("SUCCESS"))
                 {
                     List results;
-                    results = (List<Target>) convertMessageToObject(response.getMessage(), List.class);
+                    results = (List<Target>) JsonResponseConversionUtil.convertMessageToObject(response.getMessage(), List.class);
                     mAdapter = new TargetListArrayAdapter(getActivity(), android.R.id.list, results);
                     listView.setAdapter(mAdapter);
                 }
@@ -68,7 +70,7 @@ public class TargetListFragment extends ListFragment
 
             }
         };
-        targetService.retrieveAllTargets(baseRestPostAction, new Target(), agent.getId());
+      //  targetService.retrieveAllTargets(baseRestPostAction, new Target(), agent.getId());
 
 
     }
