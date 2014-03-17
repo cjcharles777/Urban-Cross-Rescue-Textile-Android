@@ -1,4 +1,4 @@
-package com.ucr.bravo.blackops.rest.object;
+package com.ucr.bravo.blackops.rest.object.beans;
 
 /**
  * Created by cedric on 3/5/14.

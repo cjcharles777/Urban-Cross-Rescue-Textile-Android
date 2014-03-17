@@ -13,19 +13,5 @@ public abstract class BaseRestPostAction
 {
     public abstract void onPostExecution(String str);
 
-    public BaseResponse convertToResponse(String str)
-    {
-        Gson gson = new Gson();
-        JsonReader reader = new JsonReader(new StringReader(str));
-        reader.setLenient(true);
-        BaseResponse response = gson.fromJson(reader, BaseResponse.class);
-        return response;
-    }
-    public Object convertMessageToObject(Object o, Class c)
-    {
-        Gson gson = new Gson();
-        String json = gson.toJson(o);
-        Object response = gson.fromJson(json, c);
-        return response;
-    }
+
 }

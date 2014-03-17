@@ -13,5 +13,8 @@
     <string name="title_activity_target_list">TargetListActivity</string>
     <string name="submit_target">Submit Target</string>
     <string name="title_activity_target_submission">Target Submission Activity</string>
+    <string name="headline_text">Headline</string>
+    <string name="target_portal_text">Target Portal</string>
+    <string name="details_text">Details</string>
 
 </resources>

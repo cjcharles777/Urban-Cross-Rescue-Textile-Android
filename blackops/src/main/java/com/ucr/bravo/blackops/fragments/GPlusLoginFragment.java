@@ -11,7 +11,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -24,7 +23,7 @@ import com.ucr.bravo.blackops.activities.AccessRequestActivity;
 import com.ucr.bravo.blackops.activities.MainActivity;
 import com.ucr.bravo.blackops.activities.TargetListActivity;
 import com.ucr.bravo.blackops.rest.BaseRestPostAction;
-import com.ucr.bravo.blackops.rest.object.Agent;
+import com.ucr.bravo.blackops.rest.object.beans.Agent;
 import com.ucr.bravo.blackops.rest.object.response.BaseResponse;
 import com.ucr.bravo.blackops.rest.service.AgentService;
 

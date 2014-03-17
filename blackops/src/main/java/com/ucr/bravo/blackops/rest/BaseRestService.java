@@ -9,7 +9,7 @@ import com.ucr.bravo.blackops.tasks.PostRestCallTask;
 public class BaseRestService
 {
 
-    protected final static String BASE_URL = "http://donkeigy.endofinternet.net:18077/black-ops/rest";
+
     private String requestSection;
 
     public BaseRestService(String requestSection)
@@ -27,11 +27,11 @@ public class BaseRestService
 
     public void executePostCall(String endpoint, BaseRestPostAction baseRestPostAction, String jsonParamsString)
     {
-        new PostRestCallTask(baseRestPostAction, jsonParamsString ).execute(BASE_URL + requestSection + endpoint);
+        new PostRestCallTask(baseRestPostAction, jsonParamsString ).execute(requestSection + endpoint);
     }
     public void executeGetCall(String endpoint, BaseRestPostAction baseRestPostAction)
     {
-        new GetRestCallTask(baseRestPostAction).execute(BASE_URL + requestSection + endpoint);
+        new GetRestCallTask(baseRestPostAction).execute(requestSection + endpoint);
     }
 
 }

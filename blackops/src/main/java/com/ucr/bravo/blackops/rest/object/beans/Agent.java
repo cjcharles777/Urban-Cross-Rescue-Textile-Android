@@ -1,4 +1,4 @@
-package com.ucr.bravo.blackops.rest.object;
+package com.ucr.bravo.blackops.rest.object.beans;
 
 import java.io.Serializable;
 

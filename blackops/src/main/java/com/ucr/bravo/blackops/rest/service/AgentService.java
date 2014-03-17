@@ -3,7 +3,7 @@ package com.ucr.bravo.blackops.rest.service;
 import com.google.gson.Gson;
 import com.ucr.bravo.blackops.rest.BaseRestService;
 import com.ucr.bravo.blackops.rest.BaseRestPostAction;
-import com.ucr.bravo.blackops.rest.object.Agent;
+import com.ucr.bravo.blackops.rest.object.beans.Agent;
 import com.ucr.bravo.blackops.rest.object.request.BaseRequest;
 
 /**

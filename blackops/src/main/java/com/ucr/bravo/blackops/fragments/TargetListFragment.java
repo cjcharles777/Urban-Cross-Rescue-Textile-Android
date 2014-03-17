@@ -12,8 +12,8 @@ import com.ucr.bravo.blackops.R;
 import com.ucr.bravo.blackops.activities.MainActivity;
 import com.ucr.bravo.blackops.adapters.TargetListArrayAdapter;
 import com.ucr.bravo.blackops.rest.BaseRestPostAction;
-import com.ucr.bravo.blackops.rest.object.Agent;
-import com.ucr.bravo.blackops.rest.object.Target;
+import com.ucr.bravo.blackops.rest.object.beans.Agent;
+import com.ucr.bravo.blackops.rest.object.beans.Target;
 import com.ucr.bravo.blackops.rest.object.response.BaseResponse;
 import com.ucr.bravo.blackops.rest.service.TargetService;
 

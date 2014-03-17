@@ -5,11 +5,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ucr.bravo.blackops.R;
-import com.ucr.bravo.blackops.rest.object.Target;
+import com.ucr.bravo.blackops.rest.object.beans.Target;
 
 import java.util.List;
 
