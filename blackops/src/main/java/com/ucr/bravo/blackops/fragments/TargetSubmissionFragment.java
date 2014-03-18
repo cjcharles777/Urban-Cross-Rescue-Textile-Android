@@ -5,11 +5,14 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
+import android.widget.Toast;
 
 import com.ucr.bravo.blackops.BlackOpsApplication;
 import com.ucr.bravo.blackops.R;
 import com.ucr.bravo.blackops.adapters.PortalSearchArrayAdapter;
+import com.ucr.bravo.blackops.rest.object.beans.Portal;
 
 /**
  * Created by cedric on 3/14/14.
@@ -27,6 +30,15 @@ public class TargetSubmissionFragment extends Fragment
 
         actv = (AutoCompleteTextView) rootView.findViewById(R.id.portalAutoCompleteTextView);
         actv.setAdapter(new PortalSearchArrayAdapter (getActivity(), ((BlackOpsApplication) getActivity().getApplication()).getRequesterId()));
+        actv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+                                    long arg3)
+            {
+                Portal selected = (Portal) arg0.getAdapter().getItem(arg2);
+            }
+        });
         return rootView;
     }
 
