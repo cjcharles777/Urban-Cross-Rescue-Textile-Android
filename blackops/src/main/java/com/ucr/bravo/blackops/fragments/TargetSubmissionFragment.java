@@ -46,8 +46,8 @@ public class TargetSubmissionFragment extends Fragment
                                     long arg3)
             {
                 selected = (Portal) arg0.getAdapter().getItem(arg2);
-                listItems.add(selected.getName());
-                adapter.notifyDataSetChanged();
+                //listItems.add(selected.getName());
+               // adapter.notifyDataSetChanged();
             }
         });
         adapter=new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1,listItems);

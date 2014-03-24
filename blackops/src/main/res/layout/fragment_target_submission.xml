@@ -1,9 +1,6 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:fillViewport="true">
     <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -54,35 +51,35 @@
             android:layout_toLeftOf="@+id/addButton" />
         <ListView
             android:id="@android:id/list"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="200dp"
             android:layout_below="@+id/portalAutoCompleteTextView"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="@string/details_text"
             android:id="@+id/detailsTextView"
-            android:layout_marginTop="206dp"
+            android:layout_marginTop="10dp"
             android:layout_below="@android:id/list"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
 
         <EditText
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:inputType="textMultiLine"
             android:ems="10"
             android:id="@+id/detailsEditText"
-            android:layout_below="@+id/detailsTextView"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_marginTop="39dp"
-            android:layout_alignRight="@+id/portalAutoCompleteTextView"
-            android:layout_alignEnd="@+id/portalAutoCompleteTextView" />
+            android:layout_below="@+id/detailsTextView"
+            android:layout_alignRight="@+id/detailsTextView"
+            android:layout_alignEnd="@+id/detailsTextView"
+            android:layout_marginTop="30dp" />
 
         <Button
             android:layout_width="wrap_content"
@@ -95,4 +92,3 @@
             android:layout_alignBottom="@+id/portalAutoCompleteTextView" />
 
     </RelativeLayout>
-</ScrollView>
