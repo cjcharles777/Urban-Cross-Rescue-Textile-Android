@@ -1,5 +1,6 @@
 package com.ucr.bravo.blackops.fragments;
 
+import android.app.Activity;
 import android.app.ListFragment;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -19,6 +20,7 @@ import com.ucr.bravo.blackops.adapters.PortalSearchArrayAdapter;
 import com.ucr.bravo.blackops.rest.object.beans.Portal;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by cedric on 3/14/14.
@@ -27,8 +29,17 @@ public class TargetSubmissionFragment extends Fragment
 {
     private AutoCompleteTextView actv;
     ArrayAdapter<String> adapter;
-    ArrayList<String> listItems = new ArrayList<String>();
+    ArrayList<Portal> listPortal;
     Portal selected;
+    OnAddPortalsListener mCallback;
+    public static final String ARG_PORTAL_LIST = "PORTAL_LIST";
+
+    // Container Activity must implement this interface
+    public interface OnAddPortalsListener
+    {
+        public void onAddButtonPressed(List<Portal> pList);
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -37,39 +48,40 @@ public class TargetSubmissionFragment extends Fragment
 
         View rootView = inflater.inflate(R.layout.fragment_target_submission, container, false);
 
-        actv = (AutoCompleteTextView) rootView.findViewById(R.id.portalAutoCompleteTextView);
-        actv.setAdapter(new PortalSearchArrayAdapter (getActivity(), ((BlackOpsApplication) getActivity().getApplication()).getRequesterId()));
-        actv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-            @Override
-            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-                                    long arg3)
-            {
-                selected = (Portal) arg0.getAdapter().getItem(arg2);
-                //listItems.add(selected.getName());
-               // adapter.notifyDataSetChanged();
-            }
-        });
-        adapter=new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1,listItems);
-        ListView listview = (ListView) rootView.findViewById(android.R.id.list);
-        listview.setAdapter(adapter);
 
         Button button = (Button) rootView.findViewById(R.id.addButton);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v)
             {
-                if(selected != null)
-                {
-                    listItems.add(selected.getName());
-                    adapter.notifyDataSetChanged();
-                    actv.setText("");
-                    selected = null;
-                }
+                mCallback.onAddButtonPressed(listPortal);
             }
         });
 
         return rootView;
     }
 
+    public void setListPortal(ArrayList<Portal> pList)
+    {
+        listPortal =  pList;
+
+    }
+    @Override
+    public void onAttach(Activity activity)
+    {
+        super.onAttach(activity);
+
+        // This makes sure that the container activity has implemented
+        // the callback interface. If not, it throws an exception
+        try
+        {
+            mCallback = (OnAddPortalsListener) activity;
+        }
+        catch (ClassCastException e)
+        {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnAddPortalsListener");
+        }
+    }
 
 }

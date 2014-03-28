@@ -1,17 +1,28 @@
 package com.ucr.bravo.blackops.rest.object.beans;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.math.BigDecimal;
 
 /**
  * Created by cedric on 3/5/14.
  */
-public class Portal
+public class Portal implements Parcelable
 {
     private String id;
     private String name;
     private String url;
     private BigDecimal latitude;
     private BigDecimal longitude;
+
+    public Portal(Parcel in) {
+        id       = in.readString();
+        name     = in.readString();
+        url      = in.readString();
+        latitude = new BigDecimal(in.readString());
+        longitude = new BigDecimal(in.readString());
+    }
 
     public String getId() {
         return id;
@@ -57,5 +68,21 @@ public class Portal
     public String toString()
     {
         return name;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int i)
+    {
+        dest.writeString(id);
+        dest.writeString(name);
+        dest.writeString(url);
+        dest.writeString(latitude.toString());
+        dest.writeString(longitude.toString());
+
     }
 }

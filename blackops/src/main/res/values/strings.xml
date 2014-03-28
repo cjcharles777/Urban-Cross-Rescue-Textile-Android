@@ -16,5 +16,6 @@
     <string name="headline_text">Headline</string>
     <string name="target_portal_text">Target Portal</string>
     <string name="details_text">Details</string>
+    <string name="title_activity_portal_list_selection">PortalListSelectionActivity</string>
 
 </resources>

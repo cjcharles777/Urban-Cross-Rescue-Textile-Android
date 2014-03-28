@@ -1,5 +1,7 @@
 package com.ucr.bravo.blackops.activities;
 
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -12,19 +14,35 @@ import android.view.ViewGroup;
 import android.os.Build;
 
 import com.ucr.bravo.blackops.R;
+import com.ucr.bravo.blackops.fragments.PortalListSelectionFragment;
 import com.ucr.bravo.blackops.fragments.TargetSubmissionFragment;
+import com.ucr.bravo.blackops.rest.object.beans.Portal;
 
-public class TargetSubmissionActivity extends ActionBarActivity {
+import java.util.ArrayList;
+import java.util.List;
+
+public class TargetSubmissionActivity extends FragmentActivity
+        implements TargetSubmissionFragment.OnAddPortalsListener
+{
+    ArrayList<Portal> listPortal = new ArrayList<Portal>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_target_submission);
+        if (findViewById(R.id.container) != null) {
+            if (savedInstanceState == null) {
+                return;
+            }
+            TargetSubmissionFragment firstFragment = new TargetSubmissionFragment();
+            // In case this activity was started with special instructions from an
+            // Intent, pass the Intent's extras to the fragment as arguments
+            firstFragment.setArguments(getIntent().getExtras());
 
-        if (savedInstanceState == null) {
+            // Add the fragment to the 'fragment_container' FrameLayout
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new TargetSubmissionFragment())
-                    .commit();
+                    .add(R.id.container, firstFragment).commit();
+
         }
     }
 
@@ -50,4 +68,24 @@ public class TargetSubmissionActivity extends ActionBarActivity {
     }
 
 
+    @Override
+    public void onAddButtonPressed(List<Portal> pList)
+    {
+        //PortalListSelectionFragment plistFragment = (PortalListSelectionFragment)
+          //      getSupportFragmentManager().findFragmentById(R.id.article_fragment);
+
+        PortalListSelectionFragment plistFragment = new PortalListSelectionFragment();
+        Bundle args = new Bundle();
+        args.putParcelableArrayList(PortalListSelectionFragment.ARG_PORTAL_LIST, (ArrayList<Portal>)pList);
+        plistFragment.setArguments(args);
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        // Replace whatever is in the fragment_container view with this fragment,
+        // and add the transaction to the back stack so the user can navigate back
+        transaction.replace(R.id.container, plistFragment);
+        transaction.addToBackStack(null);
+
+        // Commit the transaction
+        transaction.commit();
+    }
 }
