@@ -29,8 +29,8 @@ public class PortalListSelectionFragment extends Fragment
     private AutoCompleteTextView actv;
     Portal selected;
     ArrayList<Portal> listPortal = new ArrayList<Portal>();
-    ArrayList<String> listItems = new ArrayList<String>();
-    ArrayAdapter<String> adapter;
+    //ArrayList<String> listItems = new ArrayList<String>();
+    ArrayAdapter<Portal> adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,7 +52,7 @@ public class PortalListSelectionFragment extends Fragment
                 // adapter.notifyDataSetChanged();
             }
         });
-        adapter=new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1,listItems);
+        adapter=new ArrayAdapter<Portal>(getActivity(),android.R.layout.simple_list_item_1,listPortal);
         ListView listview = (ListView) rootView.findViewById(android.R.id.list);
         listview.setAdapter(adapter);
 
@@ -62,7 +62,7 @@ public class PortalListSelectionFragment extends Fragment
             {
                 if(selected != null)
                 {
-                    listItems.add(selected.getName());
+                    listPortal.add(selected);
                     adapter.notifyDataSetChanged();
                     actv.setText("");
                     selected = null;

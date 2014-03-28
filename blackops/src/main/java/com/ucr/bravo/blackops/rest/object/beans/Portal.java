@@ -16,6 +16,10 @@ public class Portal implements Parcelable
     private BigDecimal latitude;
     private BigDecimal longitude;
 
+    public Portal()
+    {
+    }
+
     public Portal(Parcel in) {
         id       = in.readString();
         name     = in.readString();
