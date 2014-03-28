@@ -22,9 +22,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TargetSubmissionActivity extends FragmentActivity
-        implements TargetSubmissionFragment.OnAddPortalsListener
+        implements TargetSubmissionFragment.OnAddPortalsListener, PortalListSelectionFragment.OnSubmitPortalsListListener
 {
-    ArrayList<Portal> listPortal = new ArrayList<Portal>();
+
+    TargetSubmissionFragment firstFragment ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +35,7 @@ public class TargetSubmissionActivity extends FragmentActivity
             if (savedInstanceState != null) {
                 return;
             }
-            TargetSubmissionFragment firstFragment = new TargetSubmissionFragment();
+             firstFragment = new TargetSubmissionFragment();
             // In case this activity was started with special instructions from an
             // Intent, pass the Intent's extras to the fragment as arguments
             firstFragment.setArguments(getIntent().getExtras());
@@ -83,9 +84,24 @@ public class TargetSubmissionActivity extends FragmentActivity
         // Replace whatever is in the fragment_container view with this fragment,
         // and add the transaction to the back stack so the user can navigate back
         transaction.replace(R.id.container, plistFragment);
-        transaction.addToBackStack(null);
+
+        // transaction.addToBackStack(null);
 
         // Commit the transaction
         transaction.commit();
+    }
+
+    @Override
+    public void onSubmitPortalsListButtonPressed(List<Portal> pList)
+    {
+        TargetSubmissionFragment targetSubmissionFragment = firstFragment;
+        // In case this activity was started with special instructions from an
+        // Intent, pass the Intent's extras to the fragment as arguments
+        Bundle args = new Bundle();
+        args.putParcelableArrayList(PortalListSelectionFragment.ARG_PORTAL_LIST, (ArrayList<Portal>)pList);
+        targetSubmissionFragment.setUIArguments(args);
+        // Add the fragment to the 'fragment_container' FrameLayout
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container, targetSubmissionFragment).commit();
     }
 }

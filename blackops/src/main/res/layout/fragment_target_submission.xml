@@ -81,12 +81,20 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Add"
+            android:text="@string/add_string"
             android:id="@+id/addButton"
             android:layout_below="@+id/portalTextView"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
 
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/submit_job_text"
+            android:id="@+id/submitJobButton"
+            android:layout_below="@+id/detailsEditText"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="72dp" />
 
 
     </RelativeLayout>

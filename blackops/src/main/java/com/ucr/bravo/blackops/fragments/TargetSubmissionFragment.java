@@ -61,11 +61,7 @@ public class TargetSubmissionFragment extends Fragment
         return rootView;
     }
 
-    public void setListPortal(ArrayList<Portal> pList)
-    {
-        listPortal =  pList;
 
-    }
     @Override
     public void onAttach(Activity activity)
     {
@@ -81,6 +77,28 @@ public class TargetSubmissionFragment extends Fragment
         {
             throw new ClassCastException(activity.toString()
                     + " must implement OnAddPortalsListener");
+        }
+    }
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // During startup, check if there are arguments passed to the fragment.
+        // onStart is a good place to do this because the layout has already been
+        // applied to the fragment at this point .
+        Bundle args = getArguments();
+        if (args != null) {
+            // Set article based on argument passed in
+            listPortal = (args.getParcelableArrayList(ARG_PORTAL_LIST));
+        }
+
+    }
+
+    public void setUIArguments(Bundle args)
+    {
+        if (args != null) {
+            // Set article based on argument passed in
+            listPortal = (args.getParcelableArrayList(ARG_PORTAL_LIST));
         }
     }
 

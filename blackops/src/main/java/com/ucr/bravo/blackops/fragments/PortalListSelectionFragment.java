@@ -1,5 +1,6 @@
 package com.ucr.bravo.blackops.fragments;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import com.ucr.bravo.blackops.adapters.PortalSearchArrayAdapter;
 import com.ucr.bravo.blackops.rest.object.beans.Portal;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by cedric on 3/27/14.
@@ -31,11 +33,20 @@ public class PortalListSelectionFragment extends Fragment
     ArrayList<Portal> listPortal = new ArrayList<Portal>();
     //ArrayList<String> listItems = new ArrayList<String>();
     ArrayAdapter<Portal> adapter;
+    OnSubmitPortalsListListener mCallback;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
+        // If activity recreated (such as from screen rotate), restore
+        // the previous article selection set by onSaveInstanceState().
+        // This is primarily necessary when in the two-pane layout.
+        if (savedInstanceState != null)
+        {
+            listPortal = savedInstanceState.getParcelableArrayList(ARG_PORTAL_LIST);
+        }
+
 
         View rootView = inflater.inflate(R.layout.fragment_portal_selection_list, container, false);
 
@@ -69,12 +80,68 @@ public class PortalListSelectionFragment extends Fragment
                 }
             }
         });
+        Button button2 = (Button) rootView.findViewById(R.id.submitPortalListButton);
+        button2.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v)
+            {
+                    mCallback.onSubmitPortalsListButtonPressed(listPortal);
+            }
+        });
 
         return rootView;
     }
-    public void setListPortal(ArrayList<Portal> pList)
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // During startup, check if there are arguments passed to the fragment.
+        // onStart is a good place to do this because the layout has already been
+        // applied to the fragment at this point .
+        Bundle args = getArguments();
+        if (args != null) {
+            // Set article based on argument passed in
+            if(listPortal == null)
+            {
+                new ArrayList<Portal>();
+            }
+            listPortal.clear();
+            List<Portal> temp = args.getParcelableArrayList(ARG_PORTAL_LIST);
+           if(temp != null)
+           {
+               listPortal.addAll(temp);
+               adapter.notifyDataSetChanged();
+           }
+        }
+    }
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        // Save the current article selection in case we need to recreate the fragment
+        outState.putParcelableArrayList(ARG_PORTAL_LIST, listPortal);
+    }
+    // Container Activity must implement this interface
+    public interface OnSubmitPortalsListListener
     {
-        listPortal =  pList;
+        public void onSubmitPortalsListButtonPressed(List<Portal> pList);
 
     }
+    @Override
+    public void onAttach(Activity activity)
+    {
+        super.onAttach(activity);
+
+        // This makes sure that the container activity has implemented
+        // the callback interface. If not, it throws an exception
+        try
+        {
+            mCallback = (OnSubmitPortalsListListener) activity;
+        }
+        catch (ClassCastException e)
+        {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnAddPortalsListener");
+        }
+    }
+
 }
