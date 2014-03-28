@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/UCRBravoBlackOpsApp.iml" filepath="$PROJECT_DIR$/UCRBravoBlackOpsApp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Urban-Cross-Rescue-Textile-Android.iml" filepath="$PROJECT_DIR$/Urban-Cross-Rescue-Textile-Android.iml" />
       <module fileurl="file://$PROJECT_DIR$/blackops/blackops.iml" filepath="$PROJECT_DIR$/blackops/blackops.iml" />
     </modules>
   </component>

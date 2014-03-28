@@ -31,7 +31,7 @@ public class TargetSubmissionActivity extends FragmentActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_target_submission);
         if (findViewById(R.id.container) != null) {
-            if (savedInstanceState == null) {
+            if (savedInstanceState != null) {
                 return;
             }
             TargetSubmissionFragment firstFragment = new TargetSubmissionFragment();
