@@ -46,6 +46,10 @@ public class TargetSubmissionFragment extends Fragment
                              Bundle savedInstanceState)
     {
 
+        if(listPortal == null)
+        {
+            listPortal = new ArrayList<Portal>();
+        }
         View rootView = inflater.inflate(R.layout.fragment_target_submission, container, false);
 
 
@@ -94,12 +98,22 @@ public class TargetSubmissionFragment extends Fragment
 
     }
 
-    public void setUIArguments(Bundle args)
+   public ArrayList<Portal> getListPortal()
+   {
+       return listPortal;
+   }
+
+    public void setListPortal(ArrayList<Portal> listPortal)
     {
-        if (args != null) {
-            // Set article based on argument passed in
-            listPortal = (args.getParcelableArrayList(ARG_PORTAL_LIST));
-        }
+        this.listPortal = listPortal;
+    }
+
+    // this method is only called once for this fragment
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // retain this fragment
+        setRetainInstance(true);
     }
 
 }

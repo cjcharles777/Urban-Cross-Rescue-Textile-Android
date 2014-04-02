@@ -27,13 +27,13 @@ public class PortalListSelectionFragment extends Fragment
 {
 
 
-    public static final String ARG_PORTAL_LIST = "PORTAL_LIST";
+
     private AutoCompleteTextView actv;
     Portal selected;
     ArrayList<Portal> listPortal = new ArrayList<Portal>();
     //ArrayList<String> listItems = new ArrayList<String>();
     ArrayAdapter<Portal> adapter;
-    OnSubmitPortalsListListener mCallback;
+    PortalListSelectionFragmentListener mCallback;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -42,10 +42,9 @@ public class PortalListSelectionFragment extends Fragment
         // If activity recreated (such as from screen rotate), restore
         // the previous article selection set by onSaveInstanceState().
         // This is primarily necessary when in the two-pane layout.
-        if (savedInstanceState != null)
-        {
-            listPortal = savedInstanceState.getParcelableArrayList(ARG_PORTAL_LIST);
-        }
+
+            listPortal = mCallback.retrieveCurrentPortalList();
+
 
 
         View rootView = inflater.inflate(R.layout.fragment_portal_selection_list, container, false);
@@ -105,7 +104,7 @@ public class PortalListSelectionFragment extends Fragment
                 new ArrayList<Portal>();
             }
             listPortal.clear();
-            List<Portal> temp = args.getParcelableArrayList(ARG_PORTAL_LIST);
+            List<Portal> temp = mCallback.retrieveCurrentPortalList();;
            if(temp != null)
            {
                listPortal.addAll(temp);
@@ -114,16 +113,18 @@ public class PortalListSelectionFragment extends Fragment
         }
     }
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(Bundle outState)
+    {
         super.onSaveInstanceState(outState);
 
         // Save the current article selection in case we need to recreate the fragment
-        outState.putParcelableArrayList(ARG_PORTAL_LIST, listPortal);
+        //outState.putParcelableArrayList(ARG_PORTAL_LIST, listPortal);
     }
     // Container Activity must implement this interface
-    public interface OnSubmitPortalsListListener
+    public interface PortalListSelectionFragmentListener
     {
         public void onSubmitPortalsListButtonPressed(List<Portal> pList);
+        public ArrayList<Portal> retrieveCurrentPortalList();
 
     }
     @Override
@@ -135,7 +136,7 @@ public class PortalListSelectionFragment extends Fragment
         // the callback interface. If not, it throws an exception
         try
         {
-            mCallback = (OnSubmitPortalsListListener) activity;
+            mCallback = (PortalListSelectionFragmentListener) activity;
         }
         catch (ClassCastException e)
         {
