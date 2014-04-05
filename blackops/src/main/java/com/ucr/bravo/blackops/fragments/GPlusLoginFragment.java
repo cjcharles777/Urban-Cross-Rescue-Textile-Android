@@ -21,8 +21,8 @@ import com.google.android.gms.plus.PlusClient;
 import com.ucr.bravo.blackops.BlackOpsApplication;
 import com.ucr.bravo.blackops.R;
 import com.ucr.bravo.blackops.activities.AccessRequestActivity;
+import com.ucr.bravo.blackops.activities.JobListActivity;
 import com.ucr.bravo.blackops.activities.MainActivity;
-import com.ucr.bravo.blackops.activities.TargetListActivity;
 import com.ucr.bravo.blackops.rest.BaseRestPostAction;
 import com.ucr.bravo.blackops.rest.object.beans.Agent;
 import com.ucr.bravo.blackops.rest.object.response.BaseResponse;
@@ -154,7 +154,7 @@ public class GPlusLoginFragment extends Fragment implements
                         {
                             Toast.makeText(getActivity(), responseAgent.getId(), Toast.LENGTH_LONG).show();
                             ((BlackOpsApplication) getActivity().getApplication()).setSessionAgent(responseAgent);
-                            Intent intent = new Intent(getActivity(), TargetListActivity.class);
+                            Intent intent = new Intent(getActivity(), JobListActivity.class);
                             startActivity(intent);
 
                         }

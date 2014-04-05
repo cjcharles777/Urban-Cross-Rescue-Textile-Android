@@ -1,6 +1,5 @@
 package com.ucr.bravo.blackops.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
@@ -8,15 +7,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.google.gson.reflect.TypeToken;
 import com.ucr.bravo.blackops.BlackOpsApplication;
 import com.ucr.bravo.blackops.R;
-import com.ucr.bravo.blackops.activities.MainActivity;
 import com.ucr.bravo.blackops.adapters.TargetListArrayAdapter;
 import com.ucr.bravo.blackops.rest.BaseRestPostAction;
 import com.ucr.bravo.blackops.rest.object.beans.Agent;
-import com.ucr.bravo.blackops.rest.object.beans.Target;
+import com.ucr.bravo.blackops.rest.object.beans.Job;
 import com.ucr.bravo.blackops.rest.object.response.BaseResponse;
-import com.ucr.bravo.blackops.rest.service.TargetService;
+import com.ucr.bravo.blackops.rest.service.JobService;
 import com.ucr.bravo.blackops.rest.utils.JsonResponseConversionUtil;
 
 import java.util.List;
@@ -24,12 +23,12 @@ import java.util.List;
 /**
  * Created by cedric on 3/5/14.
  */
-public class TargetListFragment extends ListFragment
+public class JobListFragment extends ListFragment
 {
     private ListView listView;
    // private ArrayList<Menu> menuItems;
     private TargetListArrayAdapter mAdapter;
-    private TargetService targetService;
+    private JobService jobService;
     private Agent agent;
 
     static final String[] MOBILE_OS =
@@ -38,10 +37,10 @@ public class TargetListFragment extends ListFragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        View rootView = inflater.inflate(R.layout.fragment_target_table, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_job_table, container, false);
 
         listView = (ListView) rootView.findViewById(android.R.id.list);
-        targetService = new TargetService();
+        jobService = new JobService();
 
         agent = ((BlackOpsApplication) getActivity().getApplication()).getSessionAgent();
         return rootView;
@@ -59,7 +58,7 @@ public class TargetListFragment extends ListFragment
                 if(response.getResult().equals("SUCCESS"))
                 {
                     List results;
-                    results = (List<Target>) JsonResponseConversionUtil.convertMessageToObject(response.getMessage(), List.class);
+                    results = (List<Job>) JsonResponseConversionUtil.convertMessageToObjectList(response.getMessage(), new TypeToken<List<Job>>(){});
                     mAdapter = new TargetListArrayAdapter(getActivity(), android.R.id.list, results);
                     listView.setAdapter(mAdapter);
                 }
@@ -70,7 +69,8 @@ public class TargetListFragment extends ListFragment
 
             }
         };
-      //  targetService.retrieveAllTargets(baseRestPostAction, new Target(), agent.getId());
+
+        jobService.retrieveJobs(baseRestPostAction, new Job(), agent.getId());
 
 
     }

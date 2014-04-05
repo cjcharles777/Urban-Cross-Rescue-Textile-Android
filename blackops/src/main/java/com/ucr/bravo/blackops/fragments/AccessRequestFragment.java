@@ -42,6 +42,7 @@ public class AccessRequestFragment extends Fragment
             @Override
             public void onClick(View view)
             {
+                //Todo: Switch to NetworkCommunicationUtil
                 ConnectivityManager connMgr = (ConnectivityManager)
                         getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
                 NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();

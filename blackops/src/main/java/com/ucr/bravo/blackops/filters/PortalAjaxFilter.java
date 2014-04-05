@@ -1,12 +1,9 @@
 package com.ucr.bravo.blackops.filters;
 
-import android.widget.Filter;
-
 import com.google.gson.Gson;
 import com.ucr.bravo.blackops.rest.RestCallAction;
 import com.ucr.bravo.blackops.rest.object.RestCallObject;
 import com.ucr.bravo.blackops.rest.object.beans.Portal;
-import com.ucr.bravo.blackops.rest.object.beans.Target;
 import com.ucr.bravo.blackops.rest.object.request.BaseRequest;
 
 import java.io.IOException;

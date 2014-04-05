@@ -1,15 +1,12 @@
 package com.ucr.bravo.blackops.adapters;
 
 import android.app.Activity;
-import android.content.Context;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
 
-import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.ucr.bravo.blackops.filters.PortalAjaxFilter;
 import com.ucr.bravo.blackops.rest.object.beans.Portal;
-import com.ucr.bravo.blackops.rest.object.beans.Target;
 import com.ucr.bravo.blackops.rest.object.response.BaseResponse;
 import com.ucr.bravo.blackops.rest.utils.JsonResponseConversionUtil;
 

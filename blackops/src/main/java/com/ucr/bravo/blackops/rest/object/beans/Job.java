@@ -1,23 +1,25 @@
 package com.ucr.bravo.blackops.rest.object.beans;
 
+import java.util.ArrayList;
+
 /**
  * Created by cedric on 3/5/14.
  */
-public class Target
+public class Job
 {
-    private int id;
+    private String id;
     private String title;
     private Agent requester;
-    private Portal target;
+    private ArrayList<Portal> targets;
     private int status;
     private Agent assignedTo;
     private String details;
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -37,12 +39,12 @@ public class Target
         this.requester = requester;
     }
 
-    public Portal getTarget() {
-        return target;
+    public ArrayList<Portal> getTargets() {
+        return targets;
     }
 
-    public void setTarget(Portal target) {
-        this.target = target;
+    public void setTargets(ArrayList<Portal> targets) {
+        this.targets = targets;
     }
 
     public int getStatus() {

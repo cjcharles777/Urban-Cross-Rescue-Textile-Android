@@ -9,26 +9,26 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.ucr.bravo.blackops.R;
+import com.ucr.bravo.blackops.fragments.JobSubmissionFragment;
 import com.ucr.bravo.blackops.fragments.PortalListSelectionFragment;
-import com.ucr.bravo.blackops.fragments.TargetSubmissionFragment;
 import com.ucr.bravo.blackops.rest.object.beans.Portal;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class TargetSubmissionActivity extends FragmentActivity
-        implements TargetSubmissionFragment.OnAddPortalsListener, PortalListSelectionFragment.PortalListSelectionFragmentListener
+public class JobSubmissionActivity extends FragmentActivity
+        implements JobSubmissionFragment.OnAddPortalsListener, PortalListSelectionFragment.PortalListSelectionFragmentListener
 {
 
     private static final String ARG_PORTAL_LIST = "portalList";
-    TargetSubmissionFragment firstFragment ;
+    JobSubmissionFragment firstFragment ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_target_submission);
+        setContentView(R.layout.activity_job_submission);
         FragmentManager fm = getSupportFragmentManager();
-        firstFragment = (TargetSubmissionFragment) fm.findFragmentByTag("submissionFragment");
+        firstFragment = (JobSubmissionFragment) fm.findFragmentByTag("submissionFragment");
         if (findViewById(R.id.container) != null) {
             if (savedInstanceState != null) {
 
@@ -37,7 +37,7 @@ public class TargetSubmissionActivity extends FragmentActivity
             {
 
                 if (firstFragment == null) {
-                    firstFragment = new TargetSubmissionFragment();
+                    firstFragment = new JobSubmissionFragment();
                     firstFragment.setArguments(getIntent().getExtras());
                     fm.beginTransaction().add(R.id.container, firstFragment, "submissionFragment").commit();
                 }
@@ -91,16 +91,16 @@ public class TargetSubmissionActivity extends FragmentActivity
     @Override
     public void onSubmitPortalsListButtonPressed(List<Portal> pList)
     {
-        TargetSubmissionFragment targetSubmissionFragment = firstFragment;
+        JobSubmissionFragment jobSubmissionFragment = firstFragment;
         // In case this activity was started with special instructions from an
         // Intent, pass the Intent's extras to the fragment as arguments
         //Bundle args = new Bundle();
         //args.putParcelableArrayList(PortalListSelectionFragment.ARG_PORTAL_LIST, (ArrayList<Portal>)pList);
-        //targetSubmissionFragment.setUIArguments(args);
+        //jobSubmissionFragment.setUIArguments(args);
         // Add the fragment to the 'fragment_container' FrameLayout
         getSupportFragmentManager().popBackStack();
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container, targetSubmissionFragment).commit();
+                .replace(R.id.container, jobSubmissionFragment).commit();
 
     }
 

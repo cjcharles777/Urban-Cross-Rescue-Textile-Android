@@ -11,20 +11,20 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ucr.bravo.blackops.R;
-import com.ucr.bravo.blackops.fragments.TargetListFragment;
+import com.ucr.bravo.blackops.fragments.JobListFragment;
 
-public class TargetListActivity extends ActionBarActivity {
+public class JobListActivity extends ActionBarActivity {
 
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_target_list);
+        setContentView(R.layout.activity_job_list);
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new TargetListFragment())
+                    .add(R.id.container, new JobListFragment())
                     .commit();
         }
     }
@@ -59,7 +59,7 @@ public class TargetListActivity extends ActionBarActivity {
 
     private void openPortalSubmit()
     {
-        Intent intent = new Intent(this, TargetSubmissionActivity.class);
+        Intent intent = new Intent(this, JobSubmissionActivity.class);
         startActivity(intent);
     }
 
@@ -74,7 +74,7 @@ public class TargetListActivity extends ActionBarActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_target_table, container, false);
+            View rootView = inflater.inflate(R.layout.fragment_job_table, container, false);
             return rootView;
         }
     }

@@ -8,20 +8,20 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.ucr.bravo.blackops.R;
-import com.ucr.bravo.blackops.rest.object.beans.Target;
+import com.ucr.bravo.blackops.rest.object.beans.Job;
 
 import java.util.List;
 
 /**
  * Created by cedric on 3/5/14.
  */
-public class TargetListArrayAdapter extends ArrayAdapter<Target>
+public class TargetListArrayAdapter extends ArrayAdapter<Job>
 {
 
     private final Context context;
    // private final String[] values;
 
-    public TargetListArrayAdapter(Context context, int textViewResourceId, List<Target> objects)
+    public TargetListArrayAdapter(Context context, int textViewResourceId, List<Job> objects)
     {
         super(context, textViewResourceId, objects);
         // TODO Auto-generated constructor stub
