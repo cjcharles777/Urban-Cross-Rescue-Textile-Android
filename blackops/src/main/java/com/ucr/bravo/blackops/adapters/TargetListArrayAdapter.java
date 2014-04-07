@@ -8,7 +8,9 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.ucr.bravo.blackops.R;
+import com.ucr.bravo.blackops.rest.object.beans.Agent;
 import com.ucr.bravo.blackops.rest.object.beans.Job;
+import com.ucr.bravo.blackops.rest.object.beans.Portal;
 
 import java.util.List;
 
@@ -33,10 +35,34 @@ public class TargetListArrayAdapter extends ArrayAdapter<Job>
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        View rowView = inflater.inflate(R.layout.list_target, parent, false);
-        TextView textView = (TextView) rowView.findViewById(R.id.label);
+        View rowView = inflater.inflate(R.layout.list_job, parent, false);
+        TextView titleTextView = (TextView) rowView.findViewById(R.id.titleTextView);
+        TextView portalNamesTextView = (TextView) rowView.findViewById(R.id.portalNamesTextView);
+        TextView requesterNameTextView = (TextView) rowView.findViewById(R.id.requesterNameTextView);
+        TextView distanceTextView = (TextView) rowView.findViewById(R.id.distanceTextView);
+
+
         //ImageView imageView = (ImageView) rowView.findViewById(R.id.logo);
-        textView.setText(getItem(position).getTitle());
+        Job posJob = getItem(position);
+        titleTextView.setText(posJob.getTitle());
+        List<Portal> portals = posJob.getTargets();
+        if(portals!= null)
+        {
+            portalNamesTextView.setText(portals.size()+" portals");
+        }
+        Agent requester = posJob.getRequester();
+        if(requester != null)
+        {
+            requesterNameTextView.setText(requester.getIgn());
+        }
+        else
+        {
+            requesterNameTextView.setText("_ADA_");
+        }
+
+
+        distanceTextView.setText("0.0 mi");
+        
 
         // Change icon based on name
 /**

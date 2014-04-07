@@ -66,7 +66,7 @@ public class PortalListSelectionFragment extends Fragment
         ListView listview = (ListView) rootView.findViewById(android.R.id.list);
         listview.setAdapter(adapter);
 
-        Button button = (Button) rootView.findViewById(R.id.addButton);
+        Button button = (Button) rootView.findViewById(R.id.viewPortalsButton);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v)
             {

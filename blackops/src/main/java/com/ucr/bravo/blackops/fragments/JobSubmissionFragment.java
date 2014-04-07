@@ -7,8 +7,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,7 +15,6 @@ import com.ucr.bravo.blackops.BlackOpsApplication;
 import com.ucr.bravo.blackops.R;
 import com.ucr.bravo.blackops.activities.JobListActivity;
 import com.ucr.bravo.blackops.rest.BaseRestPostAction;
-import com.ucr.bravo.blackops.rest.object.beans.Agent;
 import com.ucr.bravo.blackops.rest.object.beans.Job;
 import com.ucr.bravo.blackops.rest.object.beans.Portal;
 import com.ucr.bravo.blackops.rest.object.response.BaseResponse;
@@ -60,14 +57,14 @@ public class JobSubmissionFragment extends Fragment
         rootView = inflater.inflate(R.layout.fragment_job_submission, container, false);
 
 
-        Button addButton = (Button) rootView.findViewById(R.id.addButton);
+        Button addButton = (Button) rootView.findViewById(R.id.viewPortalsButton);
         addButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 mCallback.onAddButtonPressed(listPortal);
             }
         });
 
-        Button submitButton = (Button) rootView.findViewById(R.id.submitJobButton);
+        Button submitButton = (Button) rootView.findViewById(R.id.acceptJobButton);
         submitButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 submitJob();
@@ -78,7 +75,7 @@ public class JobSubmissionFragment extends Fragment
 
     private void submitJob()
     {
-        TextView detailTxt = (TextView) rootView.findViewById(R.id.detailsEditText);
+        TextView detailTxt = (TextView) rootView.findViewById(R.id.jobDetailsTextView);
         TextView titleTxt = (TextView) rootView.findViewById(R.id.headlineEditText);
         final Job job = new Job();
         job.setTargets(listPortal);

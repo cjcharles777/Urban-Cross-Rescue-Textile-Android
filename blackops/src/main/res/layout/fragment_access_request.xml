@@ -37,11 +37,11 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="@string/email_text"
-            android:id="@+id/textView"
+            android:id="@+id/requesterLabelTextView"
             android:layout_alignTop="@+id/emailText"
             android:layout_toLeftOf="@+id/emailText"
-            android:layout_alignLeft="@+id/textView2"
-            android:layout_alignStart="@+id/textView2" />
+            android:layout_alignLeft="@+id/jobRequesterTextView"
+            android:layout_alignStart="@+id/jobRequesterTextView" />
 
         <EditText
             android:layout_width="wrap_content"
@@ -60,7 +60,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="@string/ingress_ign"
-            android:id="@+id/textView2"
+            android:id="@+id/jobRequesterTextView"
             android:layout_above="@+id/requestAccessButton"
             android:layout_toLeftOf="@+id/ignEditText" />
 

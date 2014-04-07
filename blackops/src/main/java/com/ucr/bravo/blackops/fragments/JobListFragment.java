@@ -1,5 +1,6 @@
 package com.ucr.bravo.blackops.fragments;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
@@ -30,9 +31,8 @@ public class JobListFragment extends ListFragment
     private TargetListArrayAdapter mAdapter;
     private JobService jobService;
     private Agent agent;
+    private JobListFragmentListener mCallback;
 
-    static final String[] MOBILE_OS =
-            new String[] { "Android", "iOS", "WindowsMobile", "Blackberry"};
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
@@ -75,11 +75,38 @@ public class JobListFragment extends ListFragment
 
     }
     @Override
-    public void onListItemClick(ListView l, View v, int position, long id) {
+    public void onListItemClick(ListView l, View v, int position, long id)
+    {
 
         //get selected items
-        String selectedValue = (String) getListAdapter().getItem(position);
+        Job selectedValue = (Job) l.getAdapter().getItem(position);
+        mCallback.onListItemClick(selectedValue);
         //Toast.makeText(this, selectedValue, Toast.LENGTH_SHORT).show();
 
+    }
+
+
+    // Container Activity must implement this interface
+    public interface JobListFragmentListener
+    {
+        public void onListItemClick(Job job);
+
+    }
+    @Override
+    public void onAttach(Activity activity)
+    {
+        super.onAttach(activity);
+
+        // This makes sure that the container activity has implemented
+        // the callback interface. If not, it throws an exception
+        try
+        {
+            mCallback = (JobListFragmentListener) activity;
+        }
+        catch (ClassCastException e)
+        {
+            throw new ClassCastException(activity.toString()
+                    + " must implement JobListFragmentListener");
+        }
     }
 }

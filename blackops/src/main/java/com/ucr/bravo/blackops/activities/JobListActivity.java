@@ -1,6 +1,9 @@
 package com.ucr.bravo.blackops.activities;
 
 import android.content.Intent;
+import android.net.Uri;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -12,20 +15,44 @@ import android.view.ViewGroup;
 
 import com.ucr.bravo.blackops.R;
 import com.ucr.bravo.blackops.fragments.JobListFragment;
+import com.ucr.bravo.blackops.fragments.JobReviewFragment;
+import com.ucr.bravo.blackops.fragments.PortalListReviewFragment;
+import com.ucr.bravo.blackops.rest.object.beans.Job;
+import com.ucr.bravo.blackops.rest.object.beans.Portal;
 
-public class JobListActivity extends ActionBarActivity {
+import java.util.ArrayList;
 
+public class JobListActivity extends ActionBarActivity
+implements JobListFragment.JobListFragmentListener, JobReviewFragment.JobReviewFragmentListener,
+        PortalListReviewFragment.PortalListReviewFragmentListener
+{
+    private JobListFragment firstFragment ;
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_job_list);
 
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new JobListFragment())
-                    .commit();
+        FragmentManager fm = getSupportFragmentManager();
+        firstFragment = (JobListFragment) fm.findFragmentByTag("jobListFragment");
+        if (findViewById(R.id.container) != null)
+        {
+            if (savedInstanceState != null)
+            {
+
+            }
+            else
+            {
+
+                if (firstFragment == null)
+                {
+                    firstFragment = new JobListFragment();
+                    firstFragment.setArguments(getIntent().getExtras());
+                    fm.beginTransaction().add(R.id.container, firstFragment, "jobListFragment").commit();
+                }
+            }
         }
     }
 
@@ -63,20 +90,54 @@ public class JobListActivity extends ActionBarActivity {
         startActivity(intent);
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
 
-        public PlaceholderFragment() {
-        }
+    @Override
+    public void onListItemClick(Job job)
+    {
+        JobReviewFragment jobReviewFragment = new JobReviewFragment();
+        jobReviewFragment.setJob(job);
+        jobReviewFragment.setRetainInstance(true);
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        // Replace whatever is in the fragment_container view with this fragment,
+        // and add the transaction to the back stack so the user can navigate back
+        transaction.replace(R.id.container, jobReviewFragment, "selectedJobFragment");
+        transaction.addToBackStack(null);
 
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_job_table, container, false);
-            return rootView;
-        }
+        // Commit the transaction
+        transaction.commit();
     }
 
+
+    @Override
+    public ArrayList<Portal> retrieveCurrentPortalList()
+    {
+        FragmentManager fm = getSupportFragmentManager();
+        JobReviewFragment jobReviewFragment = (JobReviewFragment) fm.findFragmentByTag("selectedJobFragment");
+        if(jobReviewFragment != null && jobReviewFragment.getJob() != null)
+        {
+            return jobReviewFragment.getJob().getTargets();
+        }
+        return new ArrayList<Portal>();
+    }
+
+    @Override
+    public void onAddButtonPressed()
+    {
+        //PortalListSelectionFragment plistFragment = (PortalListSelectionFragment)
+        //      getSupportFragmentManager().findFragmentById(R.id.article_fragment);
+
+        PortalListReviewFragment plistFragment = new PortalListReviewFragment();
+        Bundle args = new Bundle();
+        // args.putParcelableArrayList(PortalListSelectionFragment.ARG_PORTAL_LIST, (ArrayList<Portal>)pList);
+        //plistFragment.setArguments(args);
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        // Replace whatever is in the fragment_container view with this fragment,
+        // and add the transaction to the back stack so the user can navigate back
+        transaction.replace(R.id.container, plistFragment);
+        transaction.addToBackStack(null);
+
+        // Commit the transaction
+        transaction.commit();
+    }
 }
