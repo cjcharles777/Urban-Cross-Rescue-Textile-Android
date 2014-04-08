@@ -70,6 +70,9 @@ public class JobSubmissionFragment extends Fragment
                 submitJob();
             }
         });
+
+        TextView numOfPortalsTextView = (TextView) rootView.findViewById(R.id.numOfPortalsTextView);
+        numOfPortalsTextView.setText(listPortal.size() + "Portals");
         return rootView;
     }
 

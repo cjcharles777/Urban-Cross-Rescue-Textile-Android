@@ -1,6 +1,7 @@
 package com.ucr.bravo.blackops.activities;
 
 
+import android.location.Location;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -16,7 +17,7 @@ import com.ucr.bravo.blackops.rest.object.beans.Portal;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JobSubmissionActivity extends FragmentActivity
+public class JobSubmissionActivity extends LocationActivity
         implements JobSubmissionFragment.OnAddPortalsListener, PortalListSelectionFragment.PortalListSelectionFragmentListener
 {
 
@@ -43,6 +44,12 @@ public class JobSubmissionActivity extends FragmentActivity
                 }
             }
         }
+    }
+
+    @Override
+    protected void onReceivedAddress(String address)
+    {
+
     }
 
 
@@ -111,5 +118,8 @@ public class JobSubmissionActivity extends FragmentActivity
     }
 
 
+    @Override
+    public void onLocationChanged(Location location) {
 
+    }
 }

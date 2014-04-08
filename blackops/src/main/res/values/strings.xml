@@ -31,5 +31,15 @@
     <string name="sample_job_detail_text">This is just text details of texty text!!!!</string>
     <string name="requester_string">Requester</string>
     <string name="ada_default_agent_text">_ADA_</string>
+    <string name="latitude_longitude">%1$.8f, %2$.8f</string>
+    <string name="resolved">Error resolved. Please re-try operation.</string>
+    <string name="no_resolution">Google Play services: unable to resolve connection error.</string>
+    <string name="unknown_activity_request_code">Received an unknown activity request code %1$d in onActivityResult.</string>
+    <string name="play_services_available">Google Play services is available</string>
+    <string name="no_geocoder_available">Cannot get address. No geocoder available.</string>
+    <string name="IO_Exception_getFromLocation">IO Exception in Geocoder.getFromLocation()</string>
+    <string name="illegal_argument_exception">Illegal arguments: Latitude %1$.8f Longitude %2$.8f</string>
+    <string name="address_output_string">%1$s %2$s %3$s</string>
+    <string name="no_address_found">No address found for location</string>
 
 </resources>

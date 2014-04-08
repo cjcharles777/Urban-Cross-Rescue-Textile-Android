@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 public class Portal implements Parcelable
 {
     private String id;
+    private String guid;
     private String name;
     private String url;
     private BigDecimal latitude;
@@ -22,6 +23,7 @@ public class Portal implements Parcelable
 
     public Portal(Parcel in) {
         id       = in.readString();
+        guid       = in.readString();
         name     = in.readString();
         url      = in.readString();
         latitude = new BigDecimal(in.readString());
@@ -68,6 +70,10 @@ public class Portal implements Parcelable
         this.longitude = longitude;
     }
 
+    public String getGuid() {return guid;}
+
+    public void setGuid(String guid) {this.guid = guid;}
+
     @Override
     public String toString()
     {
@@ -83,6 +89,7 @@ public class Portal implements Parcelable
     public void writeToParcel(Parcel dest, int i)
     {
         dest.writeString(id);
+        dest.writeString(guid);
         dest.writeString(name);
         dest.writeString(url);
         dest.writeString(latitude.toString());

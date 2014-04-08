@@ -1,7 +1,6 @@
 package com.ucr.bravo.blackops.fragments;
 
 import android.app.Activity;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -76,7 +75,7 @@ public class JobReviewFragment extends Fragment {
     {
         View rootView = inflater.inflate(R.layout.fragment_job_review, container, false);
         TextView jobHeadlineTextView = (TextView) rootView.findViewById(R.id.jobHeadlineTextView);
-        TextView numOfPortalstextView = (TextView) rootView.findViewById(R.id.numOfPortalstextView);
+        TextView numOfPortalstextView = (TextView) rootView.findViewById(R.id.numOfPortalsTextView);
         TextView jobDetailsTextView  = (TextView) rootView.findViewById(R.id.jobDetailsTextView);
         TextView requesterLabelTextView  = (TextView) rootView.findViewById(R.id.requesterLabelTextView);
         Button addButton = (Button) rootView.findViewById(R.id.viewPortalsButton);
