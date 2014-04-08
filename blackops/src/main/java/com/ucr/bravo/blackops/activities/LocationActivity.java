@@ -15,6 +15,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -36,7 +37,7 @@ import java.util.Locale;
  * Created by cedric on 4/8/14.
  */
 public abstract class LocationActivity
-        extends FragmentActivity implements
+        extends ActionBarActivity implements
         LocationListener,
         GooglePlayServicesClient.ConnectionCallbacks,
         GooglePlayServicesClient.OnConnectionFailedListener
@@ -53,7 +54,7 @@ public abstract class LocationActivity
 
     // Handle to a SharedPreferences editor
     SharedPreferences.Editor mEditor;
-
+    OnLocationUpdatedListener mCallback;
     /*
      * Note if updates have been turned on. Starts out as "false"; is set to "true" in the
      * method handleRequestSuccess of LocationUpdateReceiver.
@@ -65,7 +66,8 @@ public abstract class LocationActivity
      * Initialize the Activity
      */
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
 
         // Create a new global location parameters object
@@ -240,13 +242,11 @@ public abstract class LocationActivity
     }
 
     /**
-     * Invoked by the "Get Location" button.
      *
      * Calls getLastLocation() to get the current location
      *
-     * @param v The view object associated with this method, in this case a Button.
      */
-    public Location getLocation(View v) {
+    public Location getLocation() {
 
         // If Google Play Services is available
         if (servicesConnected()) {
@@ -268,7 +268,7 @@ public abstract class LocationActivity
      */
     // For Eclipse with ADT, suppress warnings about Geocoder.isPresent()
     @SuppressLint("NewApi")
-    public void getAddress(View v, Location location) {
+    public void getAddress(View v, Location location, GetAddressTask task) {
 
         // In Gingerbread and later, use Geocoder.isPresent() to see if a geocoder is available.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD && !Geocoder.isPresent()) {
@@ -285,7 +285,7 @@ public abstract class LocationActivity
 //            mActivityIndicator.setVisibility(View.VISIBLE);
 
             // Start the background task
-            (new GetAddressTask(this)).execute(location);
+            task.execute(location);
         }
     }
 
@@ -408,7 +408,7 @@ public abstract class LocationActivity
      * Void     - indicates that progress units are not used by this subclass
      * String   - An address passed to onPostExecute()
      */
-    protected class GetAddressTask extends AsyncTask<Location, Void, String> {
+    public abstract class GetAddressTask extends AsyncTask<Location, Void, String> {
 
         // Store the context passed to the AsyncTask when the system instantiates it.
         Context localContext;
@@ -524,9 +524,10 @@ public abstract class LocationActivity
             //mAddress.setText(address);
             onReceivedAddress(address);
         }
+        protected abstract void onReceivedAddress(String address);
     }
 
-    protected abstract void onReceivedAddress(String address);
+
 
     /**
      * Show a dialog returned by Google Play services for the
@@ -589,5 +590,19 @@ public abstract class LocationActivity
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             return mDialog;
         }
+    }
+
+    @Override
+    public void onLocationChanged(Location location)
+    {
+        onLocationChanged(location);
+    }
+    public void addListener(OnLocationUpdatedListener listener)
+    {
+        mCallback = listener;
+    }
+    public interface OnLocationUpdatedListener
+    {
+        public void onLocationUpdated(Location location);
     }
 }

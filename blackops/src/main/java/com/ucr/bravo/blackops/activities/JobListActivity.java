@@ -22,7 +22,7 @@ import com.ucr.bravo.blackops.rest.object.beans.Portal;
 
 import java.util.ArrayList;
 
-public class JobListActivity extends ActionBarActivity
+public class JobListActivity extends LocationActivity
 implements JobListFragment.JobListFragmentListener, JobReviewFragment.JobReviewFragmentListener,
         PortalListReviewFragment.PortalListReviewFragmentListener
 {

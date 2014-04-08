@@ -1,6 +1,7 @@
 package com.ucr.bravo.blackops.fragments;
 
 import android.app.Activity;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.widget.ListView;
 import com.google.gson.reflect.TypeToken;
 import com.ucr.bravo.blackops.BlackOpsApplication;
 import com.ucr.bravo.blackops.R;
+import com.ucr.bravo.blackops.activities.LocationActivity;
 import com.ucr.bravo.blackops.adapters.TargetListArrayAdapter;
 import com.ucr.bravo.blackops.rest.BaseRestPostAction;
 import com.ucr.bravo.blackops.rest.object.beans.Agent;
@@ -24,7 +26,7 @@ import java.util.List;
 /**
  * Created by cedric on 3/5/14.
  */
-public class JobListFragment extends ListFragment
+public class JobListFragment extends ListFragment implements LocationActivity.OnLocationUpdatedListener
 {
     private ListView listView;
    // private ArrayList<Menu> menuItems;
@@ -59,7 +61,7 @@ public class JobListFragment extends ListFragment
                 {
                     List results;
                     results = (List<Job>) JsonResponseConversionUtil.convertMessageToObjectList(response.getMessage(), new TypeToken<List<Job>>(){});
-                    mAdapter = new TargetListArrayAdapter(getActivity(), android.R.id.list, results);
+                    mAdapter = new TargetListArrayAdapter(getActivity(), android.R.id.list, results, (LocationActivity)getActivity());
                     listView.setAdapter(mAdapter);
                 }
                 else
@@ -82,6 +84,12 @@ public class JobListFragment extends ListFragment
         Job selectedValue = (Job) l.getAdapter().getItem(position);
         mCallback.onListItemClick(selectedValue);
         //Toast.makeText(this, selectedValue, Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    public void onLocationUpdated(Location location)
+    {
 
     }
 
