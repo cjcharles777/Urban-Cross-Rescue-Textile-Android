@@ -14,6 +14,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import com.ucr.bravo.blackops.R;
 
+import com.ucr.bravo.blackops.activities.LocationActivity;
+import com.ucr.bravo.blackops.adapters.PortalListArrayAdapter;
 import com.ucr.bravo.blackops.fragments.dummy.DummyContent;
 import com.ucr.bravo.blackops.rest.object.beans.Portal;
 
@@ -74,7 +76,7 @@ public class PortalListReviewFragment extends Fragment implements AbsListView.On
 
         listPortal = (ArrayList<Portal>)mCallback.retrieveCurrentPortalList();
         View view = inflater.inflate(R.layout.fragment_portal, container, false);
-        adapter=new ArrayAdapter<Portal>(getActivity(),android.R.layout.simple_list_item_1,listPortal);
+        adapter= new PortalListArrayAdapter(getActivity(), android.R.id.list, listPortal, (LocationActivity)getActivity());
         ListView listview = (ListView) view.findViewById(android.R.id.list);
         listview.setAdapter(adapter);
         return view;

@@ -78,10 +78,16 @@ public class JobReviewFragment extends Fragment {
         TextView numOfPortalstextView = (TextView) rootView.findViewById(R.id.numOfPortalsTextView);
         TextView jobDetailsTextView  = (TextView) rootView.findViewById(R.id.jobDetailsTextView);
         TextView requesterLabelTextView  = (TextView) rootView.findViewById(R.id.requesterLabelTextView);
-        Button addButton = (Button) rootView.findViewById(R.id.viewPortalsButton);
-        addButton.setOnClickListener(new View.OnClickListener() {
+        Button viewListButton = (Button) rootView.findViewById(R.id.viewPortalsButton);
+        viewListButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                mListener.onAddButtonPressed();
+                mListener.onViewListButtonPressed();
+            }
+        });
+        Button viewMapbutton = (Button) rootView.findViewById(R.id.viewMapbutton);
+        viewMapbutton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                mListener.onViewMapButtonPressed();
             }
         });
         jobHeadlineTextView.setText(job.getTitle());
@@ -146,7 +152,9 @@ public class JobReviewFragment extends Fragment {
     public interface JobReviewFragmentListener
     {
         // TODO: Update argument type and name
-        public void onAddButtonPressed();
+        public void onViewListButtonPressed();
+
+        public void onViewMapButtonPressed();
     }
 
 }

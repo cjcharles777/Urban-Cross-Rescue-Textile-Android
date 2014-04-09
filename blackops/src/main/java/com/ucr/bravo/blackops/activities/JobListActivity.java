@@ -13,9 +13,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.ucr.bravo.blackops.R;
 import com.ucr.bravo.blackops.fragments.JobListFragment;
 import com.ucr.bravo.blackops.fragments.JobReviewFragment;
+import com.ucr.bravo.blackops.fragments.PortalListMapFragment;
 import com.ucr.bravo.blackops.fragments.PortalListReviewFragment;
 import com.ucr.bravo.blackops.rest.object.beans.Job;
 import com.ucr.bravo.blackops.rest.object.beans.Portal;
@@ -121,7 +124,7 @@ implements JobListFragment.JobListFragmentListener, JobReviewFragment.JobReviewF
     }
 
     @Override
-    public void onAddButtonPressed()
+    public void onViewListButtonPressed()
     {
         //PortalListSelectionFragment plistFragment = (PortalListSelectionFragment)
         //      getSupportFragmentManager().findFragmentById(R.id.article_fragment);
@@ -139,5 +142,28 @@ implements JobListFragment.JobListFragmentListener, JobReviewFragment.JobReviewF
 
         // Commit the transaction
         transaction.commit();
+    }
+
+    @Override
+    public void onViewMapButtonPressed()
+    {
+        //PortalListSelectionFragment plistFragment = (PortalListSelectionFragment)
+        //      getSupportFragmentManager().findFragmentById(R.id.article_fragment);
+
+        PortalListMapFragment map = new PortalListMapFragment();
+        Bundle args = new Bundle();
+        // args.putParcelableArrayList(PortalListSelectionFragment.ARG_PORTAL_LIST, (ArrayList<Portal>)pList);
+        //plistFragment.setArguments(args);
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        // Replace whatever is in the fragment_container view with this fragment,
+        // and add the transaction to the back stack so the user can navigate back
+        transaction.replace(R.id.container, map);
+        transaction.addToBackStack(null);
+
+        // Commit the transaction
+        transaction.commit();
+
+
     }
 }

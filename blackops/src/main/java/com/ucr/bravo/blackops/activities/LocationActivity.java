@@ -408,7 +408,7 @@ public abstract class LocationActivity
      * Void     - indicates that progress units are not used by this subclass
      * String   - An address passed to onPostExecute()
      */
-    public abstract class GetAddressTask extends AsyncTask<Location, Void, String> {
+    public abstract static class GetAddressTask extends AsyncTask<Location, Void, String> {
 
         // Store the context passed to the AsyncTask when the system instantiates it.
         Context localContext;
@@ -422,6 +422,7 @@ public abstract class LocationActivity
             // Set a Context for the background task
             localContext = context;
         }
+
 
         /**
          * Get a geocoding service instance, pass latitude and longitude to it, format the returned
@@ -457,19 +458,19 @@ public abstract class LocationActivity
             } catch (IOException exception1) {
 
                 // Log an error and return an error message
-                Log.e(LocationUtils.APPTAG, getString(R.string.IO_Exception_getFromLocation));
+                Log.e(LocationUtils.APPTAG, localContext.getString(R.string.IO_Exception_getFromLocation));
 
                 // print the stack trace
                 exception1.printStackTrace();
 
                 // Return an error message
-                return (getString(R.string.IO_Exception_getFromLocation));
+                return (localContext.getString(R.string.IO_Exception_getFromLocation));
 
                 // Catch incorrect latitude or longitude values
             } catch (IllegalArgumentException exception2) {
 
                 // Construct a message containing the invalid arguments
-                String errorString = getString(
+                String errorString = localContext.getString(
                         R.string.illegal_argument_exception,
                         location.getLatitude(),
                         location.getLongitude()
@@ -488,7 +489,7 @@ public abstract class LocationActivity
                 Address address = addresses.get(0);
 
                 // Format the first line of address
-                String addressText = getString(R.string.address_output_string,
+                String addressText = localContext.getString(R.string.address_output_string,
 
                         // If there's a street address, add it
                         address.getMaxAddressLineIndex() > 0 ?
@@ -498,7 +499,7 @@ public abstract class LocationActivity
                         address.getLocality(),
 
                         // The country of the address
-                        address.getCountryName()
+                        address.getAdminArea()
                 );
 
                 // Return the text
@@ -506,7 +507,7 @@ public abstract class LocationActivity
 
                 // If there aren't any addresses, post a message
             } else {
-                return getString(R.string.no_address_found);
+                return localContext.getString(R.string.no_address_found);
             }
         }
 
