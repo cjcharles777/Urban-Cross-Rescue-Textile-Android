@@ -1,6 +1,7 @@
 package com.ucr.bravo.blackops.fragments;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -8,11 +9,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.ucr.bravo.blackops.BlackOpsApplication;
 import com.ucr.bravo.blackops.R;
+import com.ucr.bravo.blackops.activities.JobListActivity;
+import com.ucr.bravo.blackops.rest.BaseRestPostAction;
 import com.ucr.bravo.blackops.rest.object.beans.Agent;
 import com.ucr.bravo.blackops.rest.object.beans.Job;
 import com.ucr.bravo.blackops.rest.object.beans.Portal;
+import com.ucr.bravo.blackops.rest.object.response.BaseResponse;
+import com.ucr.bravo.blackops.rest.service.JobService;
+import com.ucr.bravo.blackops.rest.utils.JsonResponseConversionUtil;
+import com.ucr.bravo.blackops.rest.utils.NetworkCommunicationUtil;
 
 import java.util.List;
 
@@ -32,10 +41,8 @@ public class JobReviewFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private Job job;
+    private JobService jobService = new JobService();
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     private JobReviewFragmentListener mListener;
 
@@ -64,8 +71,7 @@ public class JobReviewFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+
         }
     }
 
@@ -77,7 +83,8 @@ public class JobReviewFragment extends Fragment {
         TextView jobHeadlineTextView = (TextView) rootView.findViewById(R.id.jobHeadlineTextView);
         TextView numOfPortalstextView = (TextView) rootView.findViewById(R.id.numOfPortalsTextView);
         TextView jobDetailsTextView  = (TextView) rootView.findViewById(R.id.jobDetailsTextView);
-        TextView requesterLabelTextView  = (TextView) rootView.findViewById(R.id.requesterLabelTextView);
+        TextView jobRequesterTextView  = (TextView) rootView.findViewById(R.id.jobRequesterTextView);
+
         Button viewListButton = (Button) rootView.findViewById(R.id.viewPortalsButton);
         viewListButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -88,6 +95,12 @@ public class JobReviewFragment extends Fragment {
         viewMapbutton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 mListener.onViewMapButtonPressed();
+            }
+        });
+        Button acceptJobButton = (Button) rootView.findViewById(R.id.acceptJobButton);
+        acceptJobButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                acceptJob();
             }
         });
         jobHeadlineTextView.setText(job.getTitle());
@@ -104,13 +117,45 @@ public class JobReviewFragment extends Fragment {
         Agent requester = job.getRequester();
         if(requester != null)
         {
-            requesterLabelTextView.setText(requester.getIgn());
+            jobRequesterTextView.setText(requester.getIgn());
         }
         return rootView;
 
     }
 
+    private void acceptJob()
+    {
 
+
+
+        final BaseRestPostAction baseRestPostAction = new BaseRestPostAction()
+        {
+            @Override
+            public void onPostExecution(String str) {
+                BaseResponse response = JsonResponseConversionUtil.convertToResponse(str);
+                if(response.getResult().equals("SUCCESS"))
+                {
+                    Intent intent = new Intent(getActivity(), JobListActivity.class);
+                    startActivity(intent);
+                }
+                else
+                {
+                    Toast.makeText(getActivity(), getString(R.string.request_error), Toast.LENGTH_LONG).show();
+                }
+
+            }
+        };
+
+        NetworkCommunicationUtil network = new NetworkCommunicationUtil()
+        {
+            @Override
+            protected void runTask()
+            {
+                jobService.accept(baseRestPostAction, job, ((BlackOpsApplication) getActivity().getApplication()).getRequesterId());
+            }
+        };
+        network.processNetworkTask(getActivity());
+    }
 
     @Override
     public void onAttach(Activity activity)

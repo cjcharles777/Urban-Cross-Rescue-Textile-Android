@@ -33,4 +33,11 @@ public class JobService extends BaseRestService
         String endPoint = "/submit";
         executePostCall(endPoint, baseRestPostAction, json);
     }
+    public void accept(BaseRestPostAction baseRestPostAction, Job job, String requesterId)
+    {
+        Gson gson = new Gson();
+        String json = gson.toJson(new BaseRequest<Job>(requesterId, job));
+        String endPoint = "/accept";
+        executePostCall(endPoint, baseRestPostAction, json);
+    }
 }
