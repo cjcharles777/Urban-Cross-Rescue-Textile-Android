@@ -1,25 +1,19 @@
 package com.ucr.bravo.blackops.activities;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 
-import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.SupportMapFragment;
+import com.ucr.bravo.blackops.BlackOpsApplication;
 import com.ucr.bravo.blackops.R;
 import com.ucr.bravo.blackops.fragments.JobListFragment;
 import com.ucr.bravo.blackops.fragments.JobReviewFragment;
 import com.ucr.bravo.blackops.fragments.PortalListMapFragment;
 import com.ucr.bravo.blackops.fragments.PortalListReviewFragment;
+import com.ucr.bravo.blackops.rest.object.beans.Agent;
 import com.ucr.bravo.blackops.rest.object.beans.Job;
 import com.ucr.bravo.blackops.rest.object.beans.Portal;
 
@@ -30,6 +24,10 @@ implements JobListFragment.JobListFragmentListener, JobReviewFragment.JobReviewF
         PortalListReviewFragment.PortalListReviewFragmentListener
 {
     private JobListFragment firstFragment ;
+    private static final int MENU_SETTINGS = Menu.FIRST;
+    private static final int MENU_SUBMIT = Menu.FIRST + 1;
+    private static final int MENU_ADMIN = Menu.FIRST + 2;
+
 
 
     @Override
@@ -64,8 +62,20 @@ implements JobListFragment.JobListFragmentListener, JobReviewFragment.JobReviewF
     public boolean onCreateOptionsMenu(Menu menu) {
         
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.target_list, menu);
+       /* getMenuInflater().inflate(R.menu.target_list, menu);*/
         return true;
+    }
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        menu.clear();
+        menu.add(0, MENU_SETTINGS, Menu.NONE, R.string.action_settings);
+        menu.add(0, MENU_SUBMIT, Menu.NONE, R.string.submit_target);
+        Agent agent = ((BlackOpsApplication)getApplication()).getSessionAgent();
+        if(agent.getClearance() > 1)
+        {
+            menu.add(0, MENU_ADMIN, Menu.NONE, R.string.administrator);
+        }
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
@@ -76,15 +86,24 @@ implements JobListFragment.JobListFragmentListener, JobReviewFragment.JobReviewF
         // as you specify a parent activity in AndroidManifest.xml.
         switch(item.getItemId())
         {
-            case R.id.action_settings:
+            case MENU_SETTINGS:
                  return true;
-            case R.id.action_submit:
+            case MENU_SUBMIT:
                 openPortalSubmit();
+                return true;
+            case MENU_ADMIN:
+                openAdministratorOptions();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
 
+    }
+
+    private void openAdministratorOptions()
+    {
+        Intent intent = new Intent(this, PendingUserAcceptActivity.class);
+        startActivity(intent);
     }
 
     private void openPortalSubmit()

@@ -12,6 +12,7 @@
     <string name="base_url"></string>
     <string name="title_activity_target_list">TargetListActivity</string>
     <string name="submit_target">Submit Target</string>
+    <string name="administrator">Administrator</string>
     <string name="title_activity_target_submission">Target Submission Activity</string>
     <string name="headline_text">Headline</string>
     <string name="target_portal_text">Target Portal</string>
@@ -43,5 +44,6 @@
     <string name="no_address_found">No address found for location</string>
     <string name="example_address">123 Downtheway Lane, Chicago, Il 60606</string>
     <string name="string_map">Map</string>
+    <string name="title_activity_administration">Administration</string>
 
 </resources>

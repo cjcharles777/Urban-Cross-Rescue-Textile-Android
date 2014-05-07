@@ -83,7 +83,8 @@ public class PortalListReviewFragment extends Fragment implements AbsListView.On
     }
 
     @Override
-    public void onAttach(Activity activity) {
+    public void onAttach(Activity activity)
+    {
         super.onAttach(activity);
         try {
             mCallback = (PortalListReviewFragmentListener) activity;
