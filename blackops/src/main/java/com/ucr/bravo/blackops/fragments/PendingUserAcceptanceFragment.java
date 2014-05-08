@@ -6,7 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 import com.google.gson.reflect.TypeToken;
 import com.ucr.bravo.blackops.BlackOpsApplication;
@@ -39,8 +42,31 @@ public class PendingUserAcceptanceFragment extends Fragment
         View rootView = inflater.inflate(R.layout.fragment_pending_user_accept, container, false);
         listView = (ListView) rootView.findViewById(android.R.id.list);
         reqAgent = ((BlackOpsApplication) getActivity().getApplication()).getSessionAgent();
+        Button buttonSelectAll = (Button) rootView.findViewById(R.id.buttonSelectAll);
+        buttonSelectAll.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v)
+            {
+                selectToggle(true);
+            }
+        });
+        Button buttonSelectNone = (Button) rootView.findViewById(R.id.buttonSelectNone);
+        buttonSelectNone.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v)
+            {
+                selectToggle(false);
+            }
+        });
+        Button buttonSubmit = (Button) rootView.findViewById(R.id.buttonSubmit);
+        buttonSelectNone.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v)
+            {
+                submitUsersForAcceptance();
+            }
+        });
         return rootView;
     }
+
+
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState)
@@ -69,6 +95,20 @@ public class PendingUserAcceptanceFragment extends Fragment
         a.setAuthorized(false);
         agentService.retrieveAgentByExample(baseRestPostAction, a, reqAgent.getId());
 
+
+    }
+
+    private void selectToggle(boolean isAll)
+    {
+        for(int i=0; i < listView.getChildCount(); i++)
+        {
+            RelativeLayout itemLayout = (RelativeLayout)listView.getChildAt(i);
+            CheckBox cb = (CheckBox)itemLayout.findViewById(R.id.checkBox);
+            cb.setChecked(isAll);
+        }
+    }
+    private void submitUsersForAcceptance()
+    {
 
     }
 }

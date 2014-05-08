@@ -41,4 +41,6 @@ public class UserSelectListArrayAdapter extends ArrayAdapter<Agent>
         checkBox.setText(posAgent.getIgn());
         return rowView;
     }
+
+
 }
