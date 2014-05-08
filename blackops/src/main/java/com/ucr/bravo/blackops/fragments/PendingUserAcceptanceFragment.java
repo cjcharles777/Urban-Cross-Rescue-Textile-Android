@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
@@ -57,7 +58,7 @@ public class PendingUserAcceptanceFragment extends Fragment
             }
         });
         Button buttonSubmit = (Button) rootView.findViewById(R.id.buttonSubmit);
-        buttonSelectNone.setOnClickListener(new View.OnClickListener() {
+        buttonSubmit.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v)
             {
                 submitUsersForAcceptance();
@@ -102,7 +103,7 @@ public class PendingUserAcceptanceFragment extends Fragment
     {
         for(int i=0; i < listView.getChildCount(); i++)
         {
-            RelativeLayout itemLayout = (RelativeLayout)listView.getChildAt(i);
+            LinearLayout itemLayout = (LinearLayout)listView.getChildAt(i);
             CheckBox cb = (CheckBox)itemLayout.findViewById(R.id.checkBox);
             cb.setChecked(isAll);
         }

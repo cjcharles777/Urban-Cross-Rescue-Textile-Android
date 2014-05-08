@@ -8,7 +8,7 @@ public class RestCallObject
     private String extension;
     private String getPost;
     String jsonParamsString;
-    protected final static String BASE_URL = "http://http://donkeigy-mass-distraction-device.pw/:18077/black-ops/rest";
+    protected final static String BASE_URL = "http://donkeigy-mass-distraction-device.pw:18077/black-ops/rest";
 
     public RestCallObject( String extension, String getPost, String jsonParamsString)
     {
