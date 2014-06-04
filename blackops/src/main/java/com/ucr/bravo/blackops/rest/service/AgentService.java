@@ -33,6 +33,13 @@ public class AgentService extends BaseRestService
         String endPoint = "/retrieve/email";
         executePostCall(endPoint, baseRestPostAction, json);
     }
+    public void retrieveAgentByGID(BaseRestPostAction baseRestPostAction, Agent agent)
+    {
+        Gson gson = new Gson();
+        String json = gson.toJson(new BaseRequest<Agent>(agent));
+        String endPoint = "/retrieve/gid";
+        executePostCall(endPoint, baseRestPostAction, json);
+    }
     public void retrieveAgentByExample(BaseRestPostAction baseRestPostAction, Agent agent, String requesterId)
     {
         Gson gson = new Gson();

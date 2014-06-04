@@ -11,6 +11,7 @@ import com.ucr.bravo.blackops.fragments.GPlusLoginFragment;
 public class MainActivity extends ActionBarActivity  {
 
     public final static String EXTRA_MESSAGE = "com.ucr.bravo.blackops.MESSAGE";
+    public final static String EXTRA_GID = "com.ucr.bravo.blackops.GID";
     public final static String AUTHORIZED_AGENT = "com.ucr.bravo.blackops.AUTHORIZEDAGENT";
 
     @Override
