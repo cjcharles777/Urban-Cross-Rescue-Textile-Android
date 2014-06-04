@@ -12,6 +12,8 @@ public class Agent implements Serializable
     private String id;
     private Boolean authorized;
     private Integer clearance;
+    private String googleID;
+    private String name;
 
     public String getIgn() {
         return ign;
@@ -51,5 +53,21 @@ public class Agent implements Serializable
 
     public void setClearance(Integer clearance) {
         this.clearance = clearance;
+    }
+
+    public String getGoogleID() {
+        return googleID;
+    }
+
+    public void setGoogleID(String googleID) {
+        this.googleID = googleID;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
