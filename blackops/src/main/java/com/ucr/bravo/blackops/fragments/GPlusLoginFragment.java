@@ -158,7 +158,7 @@ public class GPlusLoginFragment extends Fragment implements
                             //Intent intent = new Intent(getActivity(), JobListActivity.class);
                             //startActivity(intent);
                             MainActivity main = ((MainActivity) getActivity());
-                            main.selectItem(3);
+                            main.selectItem(2);
 
                         }
                         else
