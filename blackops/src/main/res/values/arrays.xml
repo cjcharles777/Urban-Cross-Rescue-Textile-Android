@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="nav_array">
+        <item>MVP(Most Valuable Portals)</item>
+        <item>Farms</item>
+        <item>Jobs</item>
+        <item>Nearby Agents</item>
+    </string-array>
+</resources>

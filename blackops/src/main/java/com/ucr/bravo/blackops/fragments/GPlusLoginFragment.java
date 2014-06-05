@@ -155,8 +155,10 @@ public class GPlusLoginFragment extends Fragment implements
                         {
                             //Toast.makeText(getActivity(), responseAgent.getId(), Toast.LENGTH_LONG).show();
                             ((BlackOpsApplication) getActivity().getApplication()).setSessionAgent(responseAgent);
-                            Intent intent = new Intent(getActivity(), JobListActivity.class);
-                            startActivity(intent);
+                            //Intent intent = new Intent(getActivity(), JobListActivity.class);
+                            //startActivity(intent);
+                            MainActivity main = ((MainActivity) getActivity());
+                            main.selectItem(3);
 
                         }
                         else

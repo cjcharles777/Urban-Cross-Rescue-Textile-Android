@@ -46,5 +46,8 @@
     <string name="string_map">Map</string>
     <string name="title_activity_administration">Administration</string>
     <string name="title_activity_accept_pending_users">Accept Pending Users</string>
+    <string name="drawer_open">Open Drawer</string>
+    <string name="drawer_close">Close Drawer</string>
+    <string name="app_not_available">App Not Available</string>
 
 </resources>
