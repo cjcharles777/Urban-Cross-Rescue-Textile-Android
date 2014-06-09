@@ -1,5 +1,6 @@
 package com.ucr.bravo.blackops.activities;
 
+import android.location.Location;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
@@ -17,12 +18,14 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.ucr.bravo.blackops.R;
+import com.ucr.bravo.blackops.fragments.AgentLocationFragment;
 import com.ucr.bravo.blackops.fragments.ComingSoonFragment;
 import com.ucr.bravo.blackops.fragments.GPlusLoginFragment;
 import com.ucr.bravo.blackops.fragments.JobListFragment;
 import com.ucr.bravo.blackops.fragments.JobReviewFragment;
 import com.ucr.bravo.blackops.fragments.PortalListMapFragment;
 import com.ucr.bravo.blackops.fragments.PortalListReviewFragment;
+import com.ucr.bravo.blackops.listeners.AppLocationListener;
 import com.ucr.bravo.blackops.rest.object.beans.Job;
 import com.ucr.bravo.blackops.rest.object.beans.Portal;
 
@@ -30,7 +33,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends LocationActivity
         implements JobListFragment.JobListFragmentListener, JobReviewFragment.JobReviewFragmentListener,
-        PortalListReviewFragment.PortalListReviewFragmentListener{
+        PortalListReviewFragment.PortalListReviewFragmentListener, AppLocationListener{
 
     public final static String EXTRA_MESSAGE = "com.ucr.bravo.blackops.MESSAGE";
     public final static String EXTRA_GID = "com.ucr.bravo.blackops.GID";
@@ -42,43 +45,6 @@ public class MainActivity extends LocationActivity
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
     private String[] mNavigationTitles;
-
-/** Uncomment to Revert to old layout
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new GPlusLoginFragment())
-                    .commit();
-        }
-
-
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-**/
 
 @Override
 protected void onCreate(Bundle savedInstanceState) {
@@ -157,6 +123,11 @@ protected void onCreate(Bundle savedInstanceState) {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public Location getCurrentLocation() {
+        return getLocation();
+    }
+
     /* The click listner for ListView in the navigation drawer */
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
         @Override
@@ -178,7 +149,7 @@ protected void onCreate(Bundle savedInstanceState) {
                     break;
             case 2: fragment = new JobListFragment();
                     break;
-            case 3: fragment = new ComingSoonFragment();
+            case 3: fragment = new AgentLocationFragment();
                     break;
             default: fragment = new JobListFragment();
                      break;
