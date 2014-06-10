@@ -1,6 +1,7 @@
 package com.ucr.bravo.blackops.activities;
 
 import android.content.Intent;
+import android.location.Location;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
@@ -184,6 +185,16 @@ implements JobListFragment.JobListFragmentListener, JobReviewFragment.JobReviewF
         // Commit the transaction
         transaction.commit();
 
+
+    }
+
+    @Override
+    public Location getCurrentLocation() {
+        return null;
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
 
     }
 }

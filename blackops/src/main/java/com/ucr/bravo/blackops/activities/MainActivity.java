@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -28,6 +29,7 @@ import com.ucr.bravo.blackops.fragments.PortalListReviewFragment;
 import com.ucr.bravo.blackops.listeners.AppLocationListener;
 import com.ucr.bravo.blackops.rest.object.beans.Job;
 import com.ucr.bravo.blackops.rest.object.beans.Portal;
+import com.ucr.bravo.blackops.utils.LocationUtils;
 
 import java.util.ArrayList;
 
@@ -126,6 +128,15 @@ protected void onCreate(Bundle savedInstanceState) {
     @Override
     public Location getCurrentLocation() {
         return getLocation();
+    }
+
+    @Override
+    public void onLocationChanged(Location location)
+    {
+        String msg = "Updated Location: " +
+                Double.toString(location.getLatitude()) + "," +
+                Double.toString(location.getLongitude());
+        Log.e(LocationUtils.APPTAG, msg);
     }
 
     /* The click listner for ListView in the navigation drawer */
@@ -255,6 +266,7 @@ protected void onCreate(Bundle savedInstanceState) {
         transaction.commit();
 
     }
+
 
 }
 
