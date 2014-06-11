@@ -327,7 +327,7 @@ public abstract class LocationActivity
     @Override
     public void onConnected(Bundle bundle) {
         //mConnectionStatus.setText(R.string.connected);
-
+        Toast.makeText(this, "Connected", Toast.LENGTH_SHORT).show();
         if (mUpdatesRequested) {
             startPeriodicUpdates();
         }
@@ -386,7 +386,7 @@ public abstract class LocationActivity
      * In response to a request to start updates, send a request
      * to Location Services
      */
-    private void startPeriodicUpdates() {
+    public void startPeriodicUpdates() {
 
         mLocationClient.requestLocationUpdates(mLocationRequest, this);
         //mConnectionState.setText(R.string.location_requested);
@@ -396,7 +396,7 @@ public abstract class LocationActivity
      * In response to a request to stop updates, send a request to
      * Location Services
      */
-    private void stopPeriodicUpdates() {
+    public void stopPeriodicUpdates() {
         mLocationClient.removeLocationUpdates(this);
         //mConnectionState.setText(R.string.location_updates_stopped);
     }

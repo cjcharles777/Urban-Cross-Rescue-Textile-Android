@@ -18,18 +18,18 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="Location Sharing"
-                android:id="@+id/textView2"
+                android:id="@+id/location_sharing_text"
                 android:layout_column="1"
                 android:layout_centerVertical="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_toLeftOf="@+id/button2" />
+                android:layout_toLeftOf="@+id/location_sharing_button" />
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="On"
-                android:id="@+id/button2"
+                android:id="@+id/location_sharing_button"
                 android:layout_column="2"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentRight="true"

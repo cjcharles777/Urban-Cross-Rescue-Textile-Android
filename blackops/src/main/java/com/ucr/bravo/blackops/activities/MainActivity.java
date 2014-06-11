@@ -1,5 +1,6 @@
 package com.ucr.bravo.blackops.activities;
 
+import android.content.Intent;
 import android.location.Location;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -17,7 +18,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import com.ucr.bravo.blackops.BlackOpsApplication;
 import com.ucr.bravo.blackops.R;
 import com.ucr.bravo.blackops.fragments.AgentLocationFragment;
 import com.ucr.bravo.blackops.fragments.ComingSoonFragment;
@@ -27,10 +30,17 @@ import com.ucr.bravo.blackops.fragments.JobReviewFragment;
 import com.ucr.bravo.blackops.fragments.PortalListMapFragment;
 import com.ucr.bravo.blackops.fragments.PortalListReviewFragment;
 import com.ucr.bravo.blackops.listeners.AppLocationListener;
+import com.ucr.bravo.blackops.rest.BaseRestPostAction;
+import com.ucr.bravo.blackops.rest.object.beans.AgentLocation;
 import com.ucr.bravo.blackops.rest.object.beans.Job;
 import com.ucr.bravo.blackops.rest.object.beans.Portal;
+import com.ucr.bravo.blackops.rest.object.response.BaseResponse;
+import com.ucr.bravo.blackops.rest.service.AgentService;
+import com.ucr.bravo.blackops.rest.utils.JsonResponseConversionUtil;
+import com.ucr.bravo.blackops.rest.utils.NetworkCommunicationUtil;
 import com.ucr.bravo.blackops.utils.LocationUtils;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
 public class MainActivity extends LocationActivity
@@ -47,6 +57,7 @@ public class MainActivity extends LocationActivity
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
     private String[] mNavigationTitles;
+    private AgentService agentService = new AgentService();
 
 @Override
 protected void onCreate(Bundle savedInstanceState) {
@@ -137,6 +148,37 @@ protected void onCreate(Bundle savedInstanceState) {
                 Double.toString(location.getLatitude()) + "," +
                 Double.toString(location.getLongitude());
         Log.e(LocationUtils.APPTAG, msg);
+
+        final AgentLocation agentLocation = new AgentLocation();
+        agentLocation.setLatitude(new BigDecimal(location.getLatitude()));
+        agentLocation.setLongitude(new BigDecimal(location.getLongitude()));
+        final BaseRestPostAction baseRestPostAction = new BaseRestPostAction()
+        {
+            @Override
+            public void onPostExecution(String str) {
+                BaseResponse response = JsonResponseConversionUtil.convertToResponse(str);
+               // if(response.getResult().equals("SUCCESS"))
+                //{
+                    //Intent intent = new Intent(getActivity(), JobListActivity.class);
+                    //startActivity(intent);
+                //}
+                //else
+               // {
+                    Toast.makeText(getApplicationContext(), str, Toast.LENGTH_LONG).show();
+              //  }
+
+            }
+        };
+        NetworkCommunicationUtil network = new NetworkCommunicationUtil()
+        {
+            @Override
+            protected void runTask()
+            {
+                agentService.updateAgentLocation(baseRestPostAction, agentLocation, ((BlackOpsApplication) getApplication()).getRequesterId());
+            }
+        };
+        network.processNetworkTask(this);
+
     }
 
     /* The click listner for ListView in the navigation drawer */
