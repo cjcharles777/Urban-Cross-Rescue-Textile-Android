@@ -13,6 +13,7 @@ public class AgentLocation implements Serializable
     private BigDecimal latitude;
     private BigDecimal longitude;
     private Date updated;
+    private Agent agent;
 
     public String getId() {
         return id;
@@ -44,5 +45,13 @@ public class AgentLocation implements Serializable
 
     public void setUpdated(Date updated) {
         this.updated = updated;
+    }
+
+    public Agent getAgent() {
+        return agent;
+    }
+
+    public void setAgent(Agent agent) {
+        this.agent = agent;
     }
 }

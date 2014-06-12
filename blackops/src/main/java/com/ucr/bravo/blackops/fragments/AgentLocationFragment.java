@@ -19,12 +19,16 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.gson.reflect.TypeToken;
 import com.ucr.bravo.blackops.BlackOpsApplication;
 import com.ucr.bravo.blackops.R;
 import com.ucr.bravo.blackops.listeners.AppLocationListener;
 import com.ucr.bravo.blackops.rest.BaseRestPostAction;
+import com.ucr.bravo.blackops.rest.object.beans.AgentLocation;
 import com.ucr.bravo.blackops.rest.object.beans.LocationBounds;
 import com.ucr.bravo.blackops.rest.object.response.BaseResponse;
 import com.ucr.bravo.blackops.rest.service.AgentService;
@@ -33,6 +37,7 @@ import com.ucr.bravo.blackops.rest.utils.NetworkCommunicationUtil;
 import com.ucr.bravo.blackops.utils.LocationUtils;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public class AgentLocationFragment extends Fragment {
     private MapView mapView;
@@ -143,15 +148,17 @@ public class AgentLocationFragment extends Fragment {
             @Override
             public void onPostExecution(String str) {
                 BaseResponse response = JsonResponseConversionUtil.convertToResponse(str);
-                // if(response.getResult().equals("SUCCESS"))
-                //{
-                //Intent intent = new Intent(getActivity(), JobListActivity.class);
+                if(response.getResult().equals("SUCCESS"))
+                {
+                   List<AgentLocation> results = (List<AgentLocation>) JsonResponseConversionUtil.convertMessageToObjectList(response.getMessage(),
+                                                                                                            new TypeToken<List<AgentLocation>>(){});
+                    insertIntoMap(results);
                 //startActivity(intent);
-                //}
-                //else
-                // {
-                Toast.makeText(getActivity(), str, Toast.LENGTH_LONG).show();
-                //  }
+                }
+                else
+                {
+                    Toast.makeText(getActivity(), str, Toast.LENGTH_LONG).show();
+                }
 
             }
         };
@@ -165,6 +172,19 @@ public class AgentLocationFragment extends Fragment {
         };
         network.processNetworkTask(getActivity());
         return v;
+
+    }
+
+    private void insertIntoMap(List<AgentLocation> results)
+    {
+       for(AgentLocation result : results)
+       {
+           map.addMarker(new MarkerOptions()
+                   .position(new LatLng(result.getLatitude().doubleValue(),
+                           result.getLongitude().doubleValue()))
+                   .title(result.getAgent().getIgn())
+                   .icon(BitmapDescriptorFactory.fromResource(R.drawable.revolt)));
+       }
 
     }
 
