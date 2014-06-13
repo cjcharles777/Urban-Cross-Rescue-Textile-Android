@@ -2,7 +2,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.ucr.bravo.blackops.activities.JobListActivity"
     tools:ignore="MergeRootFrame" >
     <FrameLayout
         android:layout_width="wrap_content"

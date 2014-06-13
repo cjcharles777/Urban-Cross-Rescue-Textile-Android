@@ -17,6 +17,7 @@ import com.ucr.bravo.blackops.R;
 import com.ucr.bravo.blackops.activities.LocationActivity;
 import com.ucr.bravo.blackops.adapters.PortalListArrayAdapter;
 import com.ucr.bravo.blackops.fragments.dummy.DummyContent;
+import com.ucr.bravo.blackops.listeners.PortalListListener;
 import com.ucr.bravo.blackops.rest.object.beans.Portal;
 
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ public class PortalListReviewFragment extends Fragment implements AbsListView.On
     private ArrayAdapter<Portal> adapter;
 
 
-    private PortalListReviewFragmentListener mCallback;
+    private PortalListListener mCallback;
 
     /**
      * The fragment's ListView/GridView.
@@ -87,7 +88,7 @@ public class PortalListReviewFragment extends Fragment implements AbsListView.On
     {
         super.onAttach(activity);
         try {
-            mCallback = (PortalListReviewFragmentListener) activity;
+            mCallback = (PortalListListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                 + " must implement OnFragmentInteractionListener");
@@ -133,10 +134,7 @@ public class PortalListReviewFragment extends Fragment implements AbsListView.On
     * "http://developer.android.com/training/basics/fragments/communicating.html"
     * >Communicating with Other Fragments</a> for more information.
     */
-    public interface PortalListReviewFragmentListener {
-        // TODO: Update argument type and name
-        public List<Portal> retrieveCurrentPortalList();
-    }
+
 
     @Override
     public void onStart() {

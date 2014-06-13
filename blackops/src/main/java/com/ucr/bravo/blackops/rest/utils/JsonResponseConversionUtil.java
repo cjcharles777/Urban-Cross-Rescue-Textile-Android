@@ -19,10 +19,19 @@ public class JsonResponseConversionUtil
 {
     public static BaseResponse convertToResponse(String str)
     {
-        Gson gson = getCustomGson();
-        JsonReader reader = new JsonReader(new StringReader(str));
-        reader.setLenient(true);
-        BaseResponse response = gson.fromJson(reader, BaseResponse.class);
+        BaseResponse response;
+        try
+        {
+            Gson gson = getCustomGson();
+            JsonReader reader = new JsonReader(new StringReader(str));
+            reader.setLenient(true);
+            response = gson.fromJson(reader, BaseResponse.class);
+        }
+        catch (Exception e)
+        {
+            response = new BaseResponse("Error", null);
+        }
+
         return response;
     }
     public static Object convertMessageToObject(Object o, Class c)

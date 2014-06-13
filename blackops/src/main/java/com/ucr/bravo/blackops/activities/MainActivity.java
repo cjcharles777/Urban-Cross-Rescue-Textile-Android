@@ -20,16 +20,21 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.android.gms.internal.el;
 import com.ucr.bravo.blackops.BlackOpsApplication;
 import com.ucr.bravo.blackops.R;
 import com.ucr.bravo.blackops.fragments.AgentLocationFragment;
+import com.ucr.bravo.blackops.fragments.BasePortalListFragment;
 import com.ucr.bravo.blackops.fragments.ComingSoonFragment;
 import com.ucr.bravo.blackops.fragments.GPlusLoginFragment;
 import com.ucr.bravo.blackops.fragments.JobListFragment;
 import com.ucr.bravo.blackops.fragments.JobReviewFragment;
+import com.ucr.bravo.blackops.fragments.JobSubmissionFragment;
 import com.ucr.bravo.blackops.fragments.PortalListMapFragment;
 import com.ucr.bravo.blackops.fragments.PortalListReviewFragment;
+import com.ucr.bravo.blackops.fragments.PortalListSelectionFragment;
 import com.ucr.bravo.blackops.listeners.AppLocationListener;
+import com.ucr.bravo.blackops.listeners.PortalListListener;
 import com.ucr.bravo.blackops.rest.BaseRestPostAction;
 import com.ucr.bravo.blackops.rest.object.beans.AgentLocation;
 import com.ucr.bravo.blackops.rest.object.beans.Job;
@@ -42,10 +47,12 @@ import com.ucr.bravo.blackops.utils.LocationUtils;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends LocationActivity
         implements JobListFragment.JobListFragmentListener, JobReviewFragment.JobReviewFragmentListener,
-        PortalListReviewFragment.PortalListReviewFragmentListener, AppLocationListener{
+        PortalListListener, AppLocationListener, JobSubmissionFragment.OnAddPortalsListener
+{
 
     public final static String EXTRA_MESSAGE = "com.ucr.bravo.blackops.MESSAGE";
     public final static String EXTRA_GID = "com.ucr.bravo.blackops.GID";
@@ -58,6 +65,7 @@ public class MainActivity extends LocationActivity
     private CharSequence mTitle;
     private String[] mNavigationTitles;
     private AgentService agentService = new AgentService();
+    private BasePortalListFragment firstFragment ;
 
 @Override
 protected void onCreate(Bundle savedInstanceState) {
@@ -118,6 +126,7 @@ protected void onCreate(Bundle savedInstanceState) {
     public boolean onPrepareOptionsMenu(Menu menu) {
         // If the nav drawer is open, hide action items related to the content view
         boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
+
        // menu.findItem(R.id.action_websearch).setVisible(!drawerOpen);
         return super.onPrepareOptionsMenu(menu);
     }
@@ -159,8 +168,7 @@ protected void onCreate(Bundle savedInstanceState) {
                 BaseResponse response = JsonResponseConversionUtil.convertToResponse(str);
                // if(response.getResult().equals("SUCCESS"))
                 //{
-                    //Intent intent = new Intent(getActivity(), JobListActivity.class);
-                    //startActivity(intent);
+
                 //}
                 //else
                // {
@@ -181,6 +189,8 @@ protected void onCreate(Bundle savedInstanceState) {
 
     }
 
+
+
     /* The click listner for ListView in the navigation drawer */
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
         @Override
@@ -195,31 +205,54 @@ protected void onCreate(Bundle savedInstanceState) {
         switch (position)
         {
             case -1: fragment = new GPlusLoginFragment();
+                     setTitle("Login");
                      break;
             case 0: fragment = new ComingSoonFragment();
+                    setTitle("MVP's");
                     break;
             case 1: fragment = new ComingSoonFragment();
+                    setTitle("Farms");
                     break;
             case 2: fragment = new JobListFragment();
+                    setTitle("Jobs");
                     break;
             case 3: fragment = new AgentLocationFragment();
+                    setTitle("Agent Location");
                     break;
             default: fragment = new JobListFragment();
+                     setTitle("Jobs");
                      break;
         }
-
-        fragment.setArguments(getIntent().getExtras());
-
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+        switchFragments(fragment, false, false);
 
         // update selected item and title, then close the drawer
         mDrawerList.setItemChecked(position, true);
-        setTitle("Jobs");
+
         mDrawerLayout.closeDrawer(mDrawerList);
     }
 
+    public void switchFragments(Fragment fragment, boolean isAddedToBackStack, boolean isPortalListFragment)
+    {
+        fragment.setArguments(getIntent().getExtras());
+
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        if(isPortalListFragment)
+        {
+            transaction.replace(R.id.content_frame, fragment, "selectedJobFragment");
+            firstFragment = (BasePortalListFragment)fragment;
+        }
+        else
+        {
+            transaction.replace(R.id.content_frame, fragment);
+        }
+        if(isAddedToBackStack) {
+            transaction.addToBackStack(null);
+        }
+        transaction.commit();
+    }
     @Override
     public void setTitle(CharSequence title) {
         mTitle = title;
@@ -255,17 +288,8 @@ protected void onCreate(Bundle savedInstanceState) {
     }
 
 
-    @Override
-    public ArrayList<Portal> retrieveCurrentPortalList()
-    {
-        FragmentManager fm = getSupportFragmentManager();
-        JobReviewFragment jobReviewFragment = (JobReviewFragment) fm.findFragmentByTag("selectedJobFragment");
-        if(jobReviewFragment != null && jobReviewFragment.getJob() != null)
-        {
-            return jobReviewFragment.getJob().getTargets();
-        }
-        return new ArrayList<Portal>();
-    }
+
+
 
     @Override
     public void onViewListButtonPressed()
@@ -310,7 +334,59 @@ protected void onCreate(Bundle savedInstanceState) {
 
     }
 
+    @Override
+    public void onAddButtonPressed(List<Portal> pList)
+    {
+        //PortalListSelectionFragment plistFragment = (PortalListSelectionFragment)
+        //      getSupportFragmentManager().findFragmentById(R.id.article_fragment);
 
+        PortalListSelectionFragment plistFragment = new PortalListSelectionFragment();
+        Bundle args = new Bundle();
+        // args.putParcelableArrayList(PortalListSelectionFragment.ARG_PORTAL_LIST, (ArrayList<Portal>)pList);
+        //plistFragment.setArguments(args);
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        // Replace whatever is in the fragment_container view with this fragment,
+        // and add the transaction to the back stack so the user can navigate back
+        transaction.replace(R.id.content_frame, plistFragment);
+        transaction.addToBackStack(null);
+
+        // Commit the transaction
+        transaction.commit();
+    }
+
+
+    @Override
+    public void onSubmitPortalsListButtonPressed(List<Portal> pList)
+    {
+        BasePortalListFragment jobSubmissionFragment = firstFragment;
+        // In case this activity was started with special instructions from an
+        // Intent, pass the Intent's extras to the fragment as arguments
+        //Bundle args = new Bundle();
+        //args.putParcelableArrayList(PortalListSelectionFragment.ARG_PORTAL_LIST, (ArrayList<Portal>)pList);
+        //jobSubmissionFragment.setUIArguments(args);
+        // Add the fragment to the 'fragment_container' FrameLayout
+        getSupportFragmentManager().popBackStack();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.content_frame, jobSubmissionFragment).commit();
+    }
+
+
+
+    @Override
+    public ArrayList<Portal> retrieveCurrentPortalList()
+    {
+        FragmentManager fm = getSupportFragmentManager();
+        BasePortalListFragment jobReviewFragment = (BasePortalListFragment) fm.findFragmentByTag("selectedJobFragment");
+        if(jobReviewFragment != null) {
+            return jobReviewFragment.getListPortal();
+        }
+        else
+        {
+            return new ArrayList<Portal>();
+        }
+
+    }
 }
 
 

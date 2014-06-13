@@ -3,16 +3,22 @@ package com.ucr.bravo.blackops.fragments;
 import android.app.Activity;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.gson.reflect.TypeToken;
 import com.ucr.bravo.blackops.BlackOpsApplication;
 import com.ucr.bravo.blackops.R;
 import com.ucr.bravo.blackops.activities.LocationActivity;
+import com.ucr.bravo.blackops.activities.MainActivity;
 import com.ucr.bravo.blackops.adapters.TargetListArrayAdapter;
 import com.ucr.bravo.blackops.rest.BaseRestPostAction;
 import com.ucr.bravo.blackops.rest.object.beans.Agent;
@@ -21,6 +27,7 @@ import com.ucr.bravo.blackops.rest.object.response.BaseResponse;
 import com.ucr.bravo.blackops.rest.service.JobService;
 import com.ucr.bravo.blackops.rest.utils.JsonResponseConversionUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -40,11 +47,11 @@ public class JobListFragment extends ListFragment implements LocationActivity.On
                              Bundle savedInstanceState)
     {
         View rootView = inflater.inflate(R.layout.fragment_job_table, container, false);
-
         listView = (ListView) rootView.findViewById(android.R.id.list);
-        jobService = new JobService();
+        setHasOptionsMenu(true);
 
-        agent = ((BlackOpsApplication) getActivity().getApplication()).getSessionAgent();
+
+
         return rootView;
     }
 
@@ -52,23 +59,27 @@ public class JobListFragment extends ListFragment implements LocationActivity.On
     public void onActivityCreated(Bundle savedInstanceState)
     {
         super.onActivityCreated(savedInstanceState);
+        jobService = new JobService();
+        final MainActivity main = (MainActivity) getActivity();
+        agent = ((BlackOpsApplication) main.getApplication()).getSessionAgent();
         BaseRestPostAction baseRestPostAction = new BaseRestPostAction()
         {
             @Override
             public void onPostExecution(String str) {
+                List results = new ArrayList<Job>();
                 BaseResponse response = JsonResponseConversionUtil.convertToResponse(str);
                 if(response.getResult().equals("SUCCESS"))
                 {
-                    List results;
+
                     results = (List<Job>) JsonResponseConversionUtil.convertMessageToObjectList(response.getMessage(), new TypeToken<List<Job>>(){});
-                    mAdapter = new TargetListArrayAdapter(getActivity(), android.R.id.list, results, (LocationActivity)getActivity());
-                    listView.setAdapter(mAdapter);
+
                 }
                 else
                 {
-                    //Todo : What should be implemented upon failure.
+                    Toast.makeText(main,  "There has been an issue with retrieving jobs. Please try later.", Toast.LENGTH_LONG).show();
                 }
-
+                mAdapter = new TargetListArrayAdapter(main, android.R.id.list, results, (LocationActivity)getActivity());
+                listView.setAdapter(mAdapter);
             }
         };
 
@@ -86,13 +97,33 @@ public class JobListFragment extends ListFragment implements LocationActivity.On
         //Toast.makeText(this, selectedValue, Toast.LENGTH_SHORT).show();
 
     }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // handle item selection
+        switch (item.getItemId()) {
+            case R.id.action_submit:
 
+                Fragment fragment = new JobSubmissionFragment();
+                ((MainActivity) getActivity()).switchFragments(fragment, false, true);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
     @Override
     public void onLocationUpdated(Location location)
     {
 
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        MenuItem item =
+                menu.add(Menu.NONE, R.id.action_submit, 10,R.string.submit_target);
+        item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+        item.setIcon(R.drawable.ic_action_new);
+
+    }
 
     // Container Activity must implement this interface
     public interface JobListFragmentListener
@@ -116,5 +147,6 @@ public class JobListFragment extends ListFragment implements LocationActivity.On
             throw new ClassCastException(activity.toString()
                     + " must implement JobListFragmentListener");
         }
+
     }
 }

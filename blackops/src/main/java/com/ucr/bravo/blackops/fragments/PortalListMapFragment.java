@@ -18,6 +18,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.ucr.bravo.blackops.R;
+import com.ucr.bravo.blackops.listeners.PortalListListener;
 import com.ucr.bravo.blackops.rest.object.beans.Portal;
 
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ import java.util.List;
 public class PortalListMapFragment extends SupportMapFragment
 {
     private List<Portal> pList;
-    private PortalListReviewFragment.PortalListReviewFragmentListener mCallback;
+    private PortalListListener mCallback;
     private GoogleMap gMap;
 
     public static PortalListMapFragment newInstance(List<Portal> pList){
@@ -107,7 +108,7 @@ public class PortalListMapFragment extends SupportMapFragment
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mCallback = (PortalListReviewFragment.PortalListReviewFragmentListener) activity;
+            mCallback = (PortalListListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
