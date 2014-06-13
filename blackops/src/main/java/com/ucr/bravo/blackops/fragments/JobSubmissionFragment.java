@@ -13,7 +13,8 @@ import android.widget.Toast;
 
 import com.ucr.bravo.blackops.BlackOpsApplication;
 import com.ucr.bravo.blackops.R;
-import com.ucr.bravo.blackops.activities.JobListActivity;
+
+import com.ucr.bravo.blackops.activities.MainActivity;
 import com.ucr.bravo.blackops.rest.BaseRestPostAction;
 import com.ucr.bravo.blackops.rest.object.beans.Job;
 import com.ucr.bravo.blackops.rest.object.beans.Portal;
@@ -28,10 +29,10 @@ import java.util.List;
 /**
  * Created by cedric on 3/14/14.
  */
-public class JobSubmissionFragment extends Fragment
+public class JobSubmissionFragment extends BasePortalListFragment
 {
 
-    ArrayList<Portal> listPortal;
+
     OnAddPortalsListener mCallback;
     private JobService jobService = new JobService();
     private View rootView;
@@ -91,8 +92,8 @@ public class JobSubmissionFragment extends Fragment
                 BaseResponse response = JsonResponseConversionUtil.convertToResponse(str);
                 if(response.getResult().equals("SUCCESS")) 
                 {
-                    Intent intent = new Intent(getActivity(), JobListActivity.class);
-                    startActivity(intent);
+                    MainActivity main = ((MainActivity) getActivity());
+                    main.selectItem(2);
                 }
                 else
                 {
@@ -146,15 +147,6 @@ public class JobSubmissionFragment extends Fragment
 
     }
 
-   public ArrayList<Portal> getListPortal()
-   {
-       return listPortal;
-   }
-
-    public void setListPortal(ArrayList<Portal> listPortal)
-    {
-        this.listPortal = listPortal;
-    }
 
     // this method is only called once for this fragment
     @Override

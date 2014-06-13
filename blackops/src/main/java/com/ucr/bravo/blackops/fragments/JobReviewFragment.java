@@ -13,7 +13,8 @@ import android.widget.Toast;
 
 import com.ucr.bravo.blackops.BlackOpsApplication;
 import com.ucr.bravo.blackops.R;
-import com.ucr.bravo.blackops.activities.JobListActivity;
+
+import com.ucr.bravo.blackops.activities.MainActivity;
 import com.ucr.bravo.blackops.rest.BaseRestPostAction;
 import com.ucr.bravo.blackops.rest.object.beans.Agent;
 import com.ucr.bravo.blackops.rest.object.beans.Job;
@@ -35,7 +36,7 @@ import java.util.List;
  * create an instance of this fragment.
  *
  */
-public class JobReviewFragment extends Fragment {
+public class JobReviewFragment extends BasePortalListFragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -135,8 +136,8 @@ public class JobReviewFragment extends Fragment {
                 BaseResponse response = JsonResponseConversionUtil.convertToResponse(str);
                 if(response.getResult().equals("SUCCESS"))
                 {
-                    Intent intent = new Intent(getActivity(), JobListActivity.class);
-                    startActivity(intent);
+                    MainActivity main = ((MainActivity) getActivity());
+                    main.selectItem(2);
                 }
                 else
                 {
@@ -182,6 +183,10 @@ public class JobReviewFragment extends Fragment {
 
     public void setJob(Job job) {
         this.job = job;
+        if(job != null)
+        {
+            setListPortal(job.getTargets());
+        }
     }
 
     /**

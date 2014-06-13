@@ -36,11 +36,6 @@
 
         </activity>
         <activity
-            android:name="com.ucr.bravo.blackops.activities.JobListActivity"
-            android:label="@string/title_activity_target_list"
-            android:screenOrientation="portrait">
-        </activity>
-        <activity
             android:name="com.ucr.bravo.blackops.activities.JobSubmissionActivity"
             android:label="@string/title_activity_target_submission"
             android:screenOrientation="portrait">

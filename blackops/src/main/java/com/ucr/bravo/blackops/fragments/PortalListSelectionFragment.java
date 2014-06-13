@@ -15,6 +15,7 @@ import android.widget.ListView;
 import com.ucr.bravo.blackops.BlackOpsApplication;
 import com.ucr.bravo.blackops.R;
 import com.ucr.bravo.blackops.adapters.PortalSearchArrayAdapter;
+import com.ucr.bravo.blackops.listeners.PortalListListener;
 import com.ucr.bravo.blackops.rest.object.beans.Portal;
 
 import java.util.ArrayList;
@@ -33,7 +34,7 @@ public class PortalListSelectionFragment extends Fragment
     ArrayList<Portal> listPortal = new ArrayList<Portal>();
     //ArrayList<String> listItems = new ArrayList<String>();
     ArrayAdapter<Portal> adapter;
-    PortalListSelectionFragmentListener mCallback;
+    private PortalListListener mCallback;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -136,7 +137,7 @@ public class PortalListSelectionFragment extends Fragment
         // the callback interface. If not, it throws an exception
         try
         {
-            mCallback = (PortalListSelectionFragmentListener) activity;
+            mCallback = (PortalListListener) activity;
         }
         catch (ClassCastException e)
         {
