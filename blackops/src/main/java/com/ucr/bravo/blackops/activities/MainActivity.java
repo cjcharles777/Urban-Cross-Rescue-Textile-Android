@@ -118,6 +118,7 @@ protected void onCreate(Bundle savedInstanceState) {
     public boolean onPrepareOptionsMenu(Menu menu) {
         // If the nav drawer is open, hide action items related to the content view
         boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
+
        // menu.findItem(R.id.action_websearch).setVisible(!drawerOpen);
         return super.onPrepareOptionsMenu(menu);
     }
@@ -195,30 +196,43 @@ protected void onCreate(Bundle savedInstanceState) {
         switch (position)
         {
             case -1: fragment = new GPlusLoginFragment();
+                     setTitle("Login");
                      break;
             case 0: fragment = new ComingSoonFragment();
+                    setTitle("MVP's");
                     break;
             case 1: fragment = new ComingSoonFragment();
+                    setTitle("Farms");
                     break;
             case 2: fragment = new JobListFragment();
+                    setTitle("Jobs");
                     break;
             case 3: fragment = new AgentLocationFragment();
+                    setTitle("Agent Location");
                     break;
             default: fragment = new JobListFragment();
+                     setTitle("Jobs");
                      break;
         }
-
-        fragment.setArguments(getIntent().getExtras());
-
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
-
+        switchFragments(fragment, false);
         // update selected item and title, then close the drawer
         mDrawerList.setItemChecked(position, true);
-        setTitle("Jobs");
+
         mDrawerLayout.closeDrawer(mDrawerList);
     }
 
+    public void switchFragments(Fragment fragment, boolean isAddedToBackStack)
+    {
+        fragment.setArguments(getIntent().getExtras());
+
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.content_frame, fragment).commit();
+        if(isAddedToBackStack) {
+            transaction.addToBackStack(null);
+        }
+
+    }
     @Override
     public void setTitle(CharSequence title) {
         mTitle = title;
