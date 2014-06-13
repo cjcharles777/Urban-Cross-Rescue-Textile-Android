@@ -215,6 +215,8 @@ protected void onCreate(Bundle savedInstanceState) {
                      break;
         }
         switchFragments(fragment, false);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         // update selected item and title, then close the drawer
         mDrawerList.setItemChecked(position, true);
 
