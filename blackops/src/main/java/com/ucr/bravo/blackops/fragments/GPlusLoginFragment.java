@@ -120,7 +120,7 @@ public class GPlusLoginFragment extends Fragment implements
     public void onConnected(Bundle connectionHint) {
         mConnectionProgressDialog.dismiss();
 
-        Toast.makeText(getActivity(), mPlusClient.getAccountName(), Toast.LENGTH_LONG).show();
+        //Toast.makeText(getActivity(), mPlusClient.getCurrentPerson().getId(), Toast.LENGTH_LONG).show();
         sendRegistrationData();
     }
 
@@ -130,6 +130,7 @@ public class GPlusLoginFragment extends Fragment implements
     }
 
     public void sendRegistrationData() {
+        final String gid = mPlusClient.getCurrentPerson().getId();
         final String email = mPlusClient.getAccountName();
         AgentService agentService = new AgentService();
         ConnectivityManager connMgr = (ConnectivityManager)
@@ -139,7 +140,7 @@ public class GPlusLoginFragment extends Fragment implements
         {
 
             final Agent agent = new Agent();
-            agent.setEmail(email);
+            agent.setGoogleID(gid);
             BaseRestPostAction baseRestPostAction = new BaseRestPostAction()
             {
                 @Override
@@ -152,10 +153,12 @@ public class GPlusLoginFragment extends Fragment implements
                         Agent responseAgent = (Agent) JsonResponseConversionUtil.convertMessageToObject(response.getMessage(), Agent.class);
                         if(responseAgent.getAuthorized())
                         {
-                            Toast.makeText(getActivity(), responseAgent.getId(), Toast.LENGTH_LONG).show();
+                            //Toast.makeText(getActivity(), responseAgent.getId(), Toast.LENGTH_LONG).show();
                             ((BlackOpsApplication) getActivity().getApplication()).setSessionAgent(responseAgent);
-                            Intent intent = new Intent(getActivity(), JobListActivity.class);
-                            startActivity(intent);
+                            //Intent intent = new Intent(getActivity(), JobListActivity.class);
+                            //startActivity(intent);
+                            MainActivity main = ((MainActivity) getActivity());
+                            main.selectItem(2);
 
                         }
                         else
@@ -167,11 +170,12 @@ public class GPlusLoginFragment extends Fragment implements
                     else
                     {
                         String resultMessage = (String) response.getMessage();
-                        if(resultMessage.equals("Invalid Agent Email"))
+                        if(resultMessage.equals("Invalid Google ID"))
                         {
                             Intent intent = new Intent(getActivity(), AccessRequestActivity.class);
                             String message = email;
                             intent.putExtra(((MainActivity) getActivity()).EXTRA_MESSAGE, message);
+                            intent.putExtra(((MainActivity) getActivity()).EXTRA_GID, gid);
                             startActivity(intent);
 
                         }
@@ -182,7 +186,7 @@ public class GPlusLoginFragment extends Fragment implements
                     }
                 }
             };
-            agentService.retrieveAgentByEmail(baseRestPostAction, agent);
+            agentService.retrieveAgentByGID(baseRestPostAction, agent);
         }
         else
         {

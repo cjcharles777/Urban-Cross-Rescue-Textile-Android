@@ -10,14 +10,14 @@
     <string name="request_access">Request Access</string>
     <string name="default_email">you@email.com</string>
     <string name="base_url"></string>
-    <string name="title_activity_target_list">TargetListActivity</string>
+    <string name="title_activity_target_list">Jobs</string>
     <string name="submit_target">Submit Target</string>
     <string name="administrator">Administrator</string>
-    <string name="title_activity_target_submission">Target Submission Activity</string>
+    <string name="title_activity_target_submission">Submit Job</string>
     <string name="headline_text">Headline</string>
     <string name="target_portal_text">Target Portal</string>
     <string name="details_text">Details</string>
-    <string name="title_activity_portal_list_selection">PortalListSelectionActivity</string>
+    <string name="title_activity_portal_list_selection">Portals</string>
     <string name="add_string">Add</string>
     <string name="submit_target_text">Submit Targets</string>
     <string name="submit_job_text">Submit Job</string>
@@ -46,5 +46,10 @@
     <string name="string_map">Map</string>
     <string name="title_activity_administration">Administration</string>
     <string name="title_activity_accept_pending_users">Accept Pending Users</string>
+    <string name="drawer_open">Open Drawer</string>
+    <string name="drawer_close">Close Drawer</string>
+    <string name="app_not_available">App Not Available</string>
+    <string name="on_text">ON</string>
+    <string name="off_text">OFF</string>
 
 </resources>

@@ -27,6 +27,7 @@ import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.ucr.bravo.blackops.R;
+import com.ucr.bravo.blackops.listeners.AppLocationListener;
 import com.ucr.bravo.blackops.utils.LocationUtils;
 
 import java.io.IOException;
@@ -38,7 +39,7 @@ import java.util.Locale;
  */
 public abstract class LocationActivity
         extends ActionBarActivity implements
-        LocationListener,
+        AppLocationListener,
         GooglePlayServicesClient.ConnectionCallbacks,
         GooglePlayServicesClient.OnConnectionFailedListener
 {
@@ -326,7 +327,7 @@ public abstract class LocationActivity
     @Override
     public void onConnected(Bundle bundle) {
         //mConnectionStatus.setText(R.string.connected);
-
+        Toast.makeText(this, "Connected", Toast.LENGTH_SHORT).show();
         if (mUpdatesRequested) {
             startPeriodicUpdates();
         }
@@ -385,7 +386,7 @@ public abstract class LocationActivity
      * In response to a request to start updates, send a request
      * to Location Services
      */
-    private void startPeriodicUpdates() {
+    public void startPeriodicUpdates() {
 
         mLocationClient.requestLocationUpdates(mLocationRequest, this);
         //mConnectionState.setText(R.string.location_requested);
@@ -395,7 +396,7 @@ public abstract class LocationActivity
      * In response to a request to stop updates, send a request to
      * Location Services
      */
-    private void stopPeriodicUpdates() {
+    public void stopPeriodicUpdates() {
         mLocationClient.removeLocationUpdates(this);
         //mConnectionState.setText(R.string.location_updates_stopped);
     }
@@ -593,15 +594,11 @@ public abstract class LocationActivity
         }
     }
 
-    @Override
-    public void onLocationChanged(Location location)
-    {
-        onLocationChanged(location);
-    }
     public void addListener(OnLocationUpdatedListener listener)
     {
         mCallback = listener;
     }
+
     public interface OnLocationUpdatedListener
     {
         public void onLocationUpdated(Location location);

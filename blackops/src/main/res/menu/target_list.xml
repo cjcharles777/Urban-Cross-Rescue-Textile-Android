@@ -9,7 +9,7 @@
         app:showAsAction="never" />
     <item android:id="@+id/action_submit"
         android:title="@string/submit_target"
-        android:orderInCategory="100"
-        app:showAsAction="never" />
+        android:icon="@drawable/ic_action_new"
+        app:showAsAction="ifRoom" />
 
 </menu>

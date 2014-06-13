@@ -1,6 +1,7 @@
 package com.ucr.bravo.blackops.activities;
 
 import android.content.Intent;
+import android.location.Location;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
@@ -62,16 +63,17 @@ implements JobListFragment.JobListFragmentListener, JobReviewFragment.JobReviewF
     public boolean onCreateOptionsMenu(Menu menu) {
         
         // Inflate the menu; this adds items to the action bar if it is present.
-       /* getMenuInflater().inflate(R.menu.target_list, menu);*/
+        getMenuInflater().inflate(R.menu.target_list, menu);
         return true;
     }
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        menu.clear();
-        menu.add(0, MENU_SETTINGS, Menu.NONE, R.string.action_settings);
-        menu.add(0, MENU_SUBMIT, Menu.NONE, R.string.submit_target);
+    //  menu.clear();
+    //    menu.add(0, MENU_SETTINGS, Menu.NONE, R.string.action_settings);
+    //    menu.add(0, MENU_SUBMIT, Menu.NONE, R.string.submit_target);
+
         Agent agent = ((BlackOpsApplication)getApplication()).getSessionAgent();
-        if(agent.getClearance() > 1)
+        if(agent.getClearance() > 1 && menu.findItem(MENU_ADMIN) == null)
         {
             menu.add(0, MENU_ADMIN, Menu.NONE, R.string.administrator);
         }
@@ -86,9 +88,9 @@ implements JobListFragment.JobListFragmentListener, JobReviewFragment.JobReviewF
         // as you specify a parent activity in AndroidManifest.xml.
         switch(item.getItemId())
         {
-            case MENU_SETTINGS:
+            case  R.id.action_settings:
                  return true;
-            case MENU_SUBMIT:
+            case  R.id.action_submit:
                 openPortalSubmit();
                 return true;
             case MENU_ADMIN:
@@ -183,6 +185,16 @@ implements JobListFragment.JobListFragmentListener, JobReviewFragment.JobReviewF
         // Commit the transaction
         transaction.commit();
 
+
+    }
+
+    @Override
+    public Location getCurrentLocation() {
+        return null;
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
 
     }
 }

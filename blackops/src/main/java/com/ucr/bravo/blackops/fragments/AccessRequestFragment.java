@@ -33,6 +33,7 @@ public class AccessRequestFragment extends Fragment
         rootView = inflater.inflate(R.layout.fragment_access_request, container, false);
         Intent intent = getActivity().getIntent();
         String message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
+        final String gid = intent.getStringExtra(MainActivity.EXTRA_GID);
         TextView emailTxt = (TextView)rootView.findViewById(R.id.emailText);
         emailTxt.setText(message);
         agentService = new AgentService();
@@ -53,6 +54,7 @@ public class AccessRequestFragment extends Fragment
                     Agent agent = new Agent();
                     agent.setEmail(emailTxt.getText().toString());
                     agent.setIgn(ignTxt.getText().toString());
+                    agent.setGoogleID(gid);
                     BaseRestPostAction baseRestPostAction = new BaseRestPostAction() {
                         @Override
                         public void onPostExecution(String str) {
