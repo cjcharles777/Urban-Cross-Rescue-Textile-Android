@@ -61,7 +61,7 @@ public abstract class LocationActivity
      * method handleRequestSuccess of LocationUpdateReceiver.
      *
      */
-    boolean mUpdatesRequested = false;
+    boolean mUpdatesRequested;
 
     /*
      * Initialize the Activity
@@ -83,12 +83,25 @@ public abstract class LocationActivity
 
         // Set the interval ceiling to one minute
         mLocationRequest.setFastestInterval(LocationUtils.FAST_INTERVAL_CEILING_IN_MILLISECONDS);
-
-        // Note that location updates are off until the user turns them on
-        mUpdatesRequested = false;
-
         // Open Shared Preferences
         mPrefs = getSharedPreferences(LocationUtils.SHARED_PREFERENCES, Context.MODE_PRIVATE);
+        // Note that location updates are off until the user turns them on
+       if (mPrefs.contains("KEY_UPDATES_ON"))
+        {
+            mUpdatesRequested =
+                    mPrefs.getBoolean("KEY_UPDATES_ON", false);
+
+            // Otherwise, turn off location updates
+        }
+        else
+        {
+            mUpdatesRequested = false;
+            SharedPreferences.Editor editor = mPrefs.edit();
+            editor.putBoolean("KEY_UPDATES_ON", mUpdatesRequested);
+            editor.commit();
+        };
+
+
 
         // Get an editor
         mEditor = mPrefs.edit();
@@ -163,7 +176,7 @@ public abstract class LocationActivity
             mEditor.putBoolean(LocationUtils.KEY_UPDATES_REQUESTED, false);
             mEditor.commit();
         }
-
+        startUpdates();
     }
 
     /*
@@ -294,12 +307,12 @@ public abstract class LocationActivity
      * Invoked by the "Start Updates" button
      * Sends a request to start location updates
      *
-     * @param v The view object associated with this method, in this case a Button.
+     *
      */
-    public void startUpdates(View v) {
-        mUpdatesRequested = true;
+    public void startUpdates() {
 
-        if (servicesConnected()) {
+
+        if (servicesConnected() && mUpdatesRequested) {
             startPeriodicUpdates();
         }
     }
@@ -309,12 +322,12 @@ public abstract class LocationActivity
      * Sends a request to remove location updates
      * request them.
      *
-     * @param v The view object associated with this method, in this case a Button.
+     *
      */
-    public void stopUpdates(View v) {
-        mUpdatesRequested = false;
+    public void stopUpdates() {
 
-        if (servicesConnected()) {
+        if (servicesConnected() && !mUpdatesRequested)
+        {
             stopPeriodicUpdates();
         }
     }
@@ -340,6 +353,10 @@ public abstract class LocationActivity
     @Override
     public void onDisconnected() {
         //mConnectionStatus.setText(R.string.disconnected);
+        mUpdatesRequested = false;
+        mEditor.putBoolean("KEY_UPDATES_ON", mUpdatesRequested);
+        mEditor.commit();
+        stopPeriodicUpdates();
     }
 
     /*

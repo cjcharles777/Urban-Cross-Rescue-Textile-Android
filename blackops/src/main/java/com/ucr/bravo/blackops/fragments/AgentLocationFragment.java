@@ -5,7 +5,10 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +25,7 @@ import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.reflect.TypeToken;
 import com.ucr.bravo.blackops.BlackOpsApplication;
@@ -37,7 +41,12 @@ import com.ucr.bravo.blackops.rest.utils.NetworkCommunicationUtil;
 import com.ucr.bravo.blackops.utils.LocationUtils;
 
 import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+
 
 public class AgentLocationFragment extends Fragment {
     private MapView mapView;
@@ -45,6 +54,9 @@ public class AgentLocationFragment extends Fragment {
     private boolean mUpdatesRequested;
     private AppLocationListener mCallback;
     private AgentService agentService = new AgentService();
+    Handler handler;
+    Runnable runnable;
+    HashMap<String, Marker> markerHashMap = new HashMap<String, Marker>();
 
 
 
@@ -137,12 +149,19 @@ public class AgentLocationFragment extends Fragment {
             }
         });
 
+        getAgentLocations();
+        startLocationUpdater();
+
+        return v;
+
+    }
+    private void getAgentLocations()
+    {
         LatLngBounds latLngBounds = map.getProjection().getVisibleRegion().latLngBounds;
         final LocationBounds locationBounds = new LocationBounds(new BigDecimal(latLngBounds.northeast.latitude),
                 new BigDecimal(latLngBounds.southwest.latitude),
                 new BigDecimal(latLngBounds.northeast.longitude),
                 new BigDecimal(latLngBounds.southwest.longitude));
-
         final BaseRestPostAction baseRestPostAction = new BaseRestPostAction()
         {
             @Override
@@ -150,10 +169,11 @@ public class AgentLocationFragment extends Fragment {
                 BaseResponse response = JsonResponseConversionUtil.convertToResponse(str);
                 if(response.getResult().equals("SUCCESS"))
                 {
-                   List<AgentLocation> results = (List<AgentLocation>) JsonResponseConversionUtil.convertMessageToObjectList(response.getMessage(),
-                                                                                                            new TypeToken<List<AgentLocation>>(){});
+                    List<AgentLocation> results = (List<AgentLocation>) JsonResponseConversionUtil.convertMessageToObjectList(response.getMessage(),
+                            new TypeToken<List<AgentLocation>>(){});
                     insertIntoMap(results);
-                //startActivity(intent);
+                    Log.d(LocationUtils.APPTAG, "Grabbed Agent Locations");
+                    //startActivity(intent);
                 }
                 else
                 {
@@ -171,24 +191,54 @@ public class AgentLocationFragment extends Fragment {
             }
         };
         network.processNetworkTask(getActivity());
-        return v;
-
     }
-
     private void insertIntoMap(List<AgentLocation> results)
     {
        for(AgentLocation result : results)
        {
-           map.addMarker(new MarkerOptions()
-                   .position(new LatLng(result.getLatitude().doubleValue(),
-                           result.getLongitude().doubleValue()))
-                   .title(result.getAgent().getIgn())
-                   .icon(BitmapDescriptorFactory.fromResource(R.drawable.revolt)));
+           Marker existingMarker = markerHashMap.get(result.getAgent().getId());
+           boolean isUpdate = (existingMarker == null ||
+                    existingMarker.getPosition().latitude != result.getLatitude().doubleValue() ||
+                    existingMarker.getPosition().latitude != result.getLongitude().doubleValue());
+           if(isUpdate)
+           {
+               if(existingMarker != null)
+               {
+                   existingMarker.remove();
+               }
+
+               Marker updatedMarker = map.addMarker(new MarkerOptions()
+                       .position(new LatLng(result.getLatitude().doubleValue(),
+                               result.getLongitude().doubleValue()))
+                       .title(result.getAgent().getIgn())
+                       .snippet("Last Updated : " + DateUtils.getRelativeTimeSpanString(result.getUpdated().getTime(), (new Date()).getTime(), DateUtils.MINUTE_IN_MILLIS))
+                       .icon(BitmapDescriptorFactory.fromResource(R.drawable.revolt)));
+               markerHashMap.put(result.getAgent().getId(),updatedMarker);
+           }
+
+
        }
 
     }
 
+    private void startLocationUpdater()
+    {
+        handler = new Handler();
 
+
+        runnable = new Runnable()
+        {
+
+            public void run()
+            {
+                getAgentLocations();
+
+                handler.postDelayed(this, 120000);
+            }
+        };
+        runnable.run();
+
+    }
     private void initMap()
     {
         UiSettings settings = map.getUiSettings();
@@ -206,6 +256,10 @@ public class AgentLocationFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        if(handler != null && runnable != null)
+        {
+            handler.removeCallbacks(runnable);
+        }
         mapView.onDestroy();
     }
 
@@ -232,6 +286,7 @@ public class AgentLocationFragment extends Fragment {
                     + " must implement AppLocationListener");
         }
     }
+
 
 
 
