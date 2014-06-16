@@ -165,14 +165,14 @@ protected void onCreate(Bundle savedInstanceState) {
         {
             @Override
             public void onPostExecution(String str) {
-                BaseResponse response = JsonResponseConversionUtil.convertToResponse(str);
+                //BaseResponse response = JsonResponseConversionUtil.convertToResponse(str);
                // if(response.getResult().equals("SUCCESS"))
                 //{
 
                 //}
                 //else
                // {
-                    Toast.makeText(getApplicationContext(), str, Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getApplicationContext(), str, Toast.LENGTH_LONG).show();
               //  }
 
             }
