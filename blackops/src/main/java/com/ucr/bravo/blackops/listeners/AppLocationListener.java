@@ -10,6 +10,6 @@ import com.google.android.gms.location.LocationListener;
 public interface AppLocationListener extends LocationListener
 {
     public Location getCurrentLocation();
-    public void startPeriodicUpdates();
-    public void stopPeriodicUpdates();
+    public void startUpdates();
+    public void stopUpdates();
 }

@@ -176,7 +176,11 @@ public abstract class LocationActivity
             mEditor.putBoolean(LocationUtils.KEY_UPDATES_REQUESTED, false);
             mEditor.commit();
         }
-        startUpdates();
+        if(mUpdatesRequested)
+        {
+
+            startUpdates();
+        }
     }
 
     /*
@@ -311,8 +315,10 @@ public abstract class LocationActivity
      */
     public void startUpdates() {
 
-
-        if (servicesConnected() && mUpdatesRequested) {
+        mEditor.putBoolean("KEY_UPDATES_ON", true);
+        mEditor.commit();
+        mUpdatesRequested = true;
+        if (servicesConnected() && mLocationClient.isConnected()) {
             startPeriodicUpdates();
         }
     }
@@ -325,8 +331,11 @@ public abstract class LocationActivity
      *
      */
     public void stopUpdates() {
+        mEditor.putBoolean("KEY_UPDATES_ON", false);
+        mEditor.commit();
+        mUpdatesRequested = false;
 
-        if (servicesConnected() && !mUpdatesRequested)
+        if (servicesConnected() && mLocationClient.isConnected())
         {
             stopPeriodicUpdates();
         }
@@ -340,7 +349,7 @@ public abstract class LocationActivity
     @Override
     public void onConnected(Bundle bundle) {
         //mConnectionStatus.setText(R.string.connected);
-        Toast.makeText(this, "Connected", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "Connected", Toast.LENGTH_SHORT).show();
         if (mUpdatesRequested) {
             startPeriodicUpdates();
         }
@@ -353,9 +362,9 @@ public abstract class LocationActivity
     @Override
     public void onDisconnected() {
         //mConnectionStatus.setText(R.string.disconnected);
-        mUpdatesRequested = false;
-        mEditor.putBoolean("KEY_UPDATES_ON", mUpdatesRequested);
-        mEditor.commit();
+        //mUpdatesRequested = false;
+        //mEditor.putBoolean("KEY_UPDATES_ON", mUpdatesRequested);
+        //mEditor.commit();
         stopPeriodicUpdates();
     }
 

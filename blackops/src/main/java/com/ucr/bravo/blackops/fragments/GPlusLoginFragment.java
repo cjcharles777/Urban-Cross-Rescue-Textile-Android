@@ -180,7 +180,7 @@ public class GPlusLoginFragment extends Fragment implements
                         }
                         else
                         {
-                            //Todo: Add Error Message handling here
+                            Toast.makeText(getActivity(), resultMessage, Toast.LENGTH_LONG).show();
                         }
                     }
                 }

@@ -29,7 +29,7 @@ public class JsonResponseConversionUtil
         }
         catch (Exception e)
         {
-            response = new BaseResponse("Error", null);
+            response = new BaseResponse("Error", str);
         }
 
         return response;

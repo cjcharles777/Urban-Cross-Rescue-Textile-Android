@@ -139,11 +139,11 @@ public class AgentLocationFragment extends Fragment {
                 editor.commit();
                 if(mUpdatesRequested)
                 {
-                    mCallback.startPeriodicUpdates();
+                    mCallback.startUpdates();
                 }
                 else
                 {
-                    mCallback.stopPeriodicUpdates();
+                    mCallback.stopUpdates();
                 }
 
             }
