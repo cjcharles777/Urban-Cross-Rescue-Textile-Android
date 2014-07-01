@@ -36,6 +36,7 @@ public class JobSubmissionFragment extends BasePortalListFragment
     OnAddPortalsListener mCallback;
     private JobService jobService = new JobService();
     private View rootView;
+    private Job job;
 
     public static final String ARG_PORTAL_LIST = "PORTAL_LIST";
 
@@ -156,4 +157,11 @@ public class JobSubmissionFragment extends BasePortalListFragment
         setRetainInstance(true);
     }
 
+    public Job getJob() {
+        return job;
+    }
+
+    public void setJob(Job job) {
+        this.job = job;
+    }
 }

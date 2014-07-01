@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -124,6 +125,22 @@ public class JobReviewFragment extends BasePortalListFragment {
 
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // handle item selection
+        switch (item.getItemId()) {
+            case R.id.action_submit:
+
+
+                JobSubmissionFragment fragment = new JobSubmissionFragment();
+                fragment.setJob(job);
+                fragment.setRetainInstance(true);
+                ((MainActivity) getActivity()).switchFragments(fragment, false, true);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
     private void acceptJob()
     {
 
