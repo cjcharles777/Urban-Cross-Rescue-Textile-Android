@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -39,11 +42,10 @@ import java.util.List;
 public class JobReviewFragment extends BasePortalListFragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+
     private Job job;
     private JobService jobService = new JobService();
-
+    private View rootView;
 
     private JobReviewFragmentListener mListener;
 
@@ -55,13 +57,9 @@ public class JobReviewFragment extends BasePortalListFragment {
      * @param param2 Parameter 2.
      * @return A new instance of fragment JobReviewFragment.
      */
-    // TODO: Rename and change types and number of parameters
+
     public static JobReviewFragment newInstance(String param1, String param2) {
         JobReviewFragment fragment = new JobReviewFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
     public JobReviewFragment() {
@@ -80,7 +78,16 @@ public class JobReviewFragment extends BasePortalListFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        View rootView = inflater.inflate(R.layout.fragment_job_review, container, false);
+        rootView = inflater.inflate(R.layout.fragment_job_review, container, false);
+        setHasOptionsMenu(true);
+
+        return rootView;
+
+    }
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState)
+    {
+        super.onActivityCreated(savedInstanceState);
         TextView jobHeadlineTextView = (TextView) rootView.findViewById(R.id.jobHeadlineTextView);
         TextView numOfPortalstextView = (TextView) rootView.findViewById(R.id.numOfPortalsTextView);
         TextView jobDetailsTextView  = (TextView) rootView.findViewById(R.id.jobDetailsTextView);
@@ -120,10 +127,31 @@ public class JobReviewFragment extends BasePortalListFragment {
         {
             jobRequesterTextView.setText(requester.getIgn());
         }
-        return rootView;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // handle item selection
+        switch (item.getItemId()) {
+            case R.id.action_edit:
 
+
+                JobSubmissionFragment fragment = new JobSubmissionFragment();
+                fragment.setJob(job);
+                ((MainActivity) getActivity()).switchFragments(fragment, true, true);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        MenuItem item =
+                menu.add(Menu.NONE, R.id.action_edit, 10,R.string.edit_target);
+        item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+        item.setIcon(R.drawable.ic_action_edit);
+
+    }
     private void acceptJob()
     {
 

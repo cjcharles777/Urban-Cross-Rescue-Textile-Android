@@ -36,6 +36,7 @@ public class JobSubmissionFragment extends BasePortalListFragment
     OnAddPortalsListener mCallback;
     private JobService jobService = new JobService();
     private View rootView;
+    private Job job;
 
     public static final String ARG_PORTAL_LIST = "PORTAL_LIST";
 
@@ -51,11 +52,26 @@ public class JobSubmissionFragment extends BasePortalListFragment
                              Bundle savedInstanceState)
     {
 
+        rootView = inflater.inflate(R.layout.fragment_job_submission, container, false);
+
+        if(job != null)
+        {
+            listPortal = job.getTargets();
+            TextView detailTxt = (TextView) rootView.findViewById(R.id.jobDetailsTextView);
+            TextView titleTxt = (TextView) rootView.findViewById(R.id.headlineEditText);
+            detailTxt.setText(job.getDetails());
+            titleTxt.setText(job.getTitle());
+        }
+        else
+        {
+            job = new Job();
+            //job.setTargets(listPortal);
+        }
         if(listPortal == null)
         {
             listPortal = new ArrayList<Portal>();
         }
-        rootView = inflater.inflate(R.layout.fragment_job_submission, container, false);
+
 
 
         Button addButton = (Button) rootView.findViewById(R.id.viewPortalsButton);
@@ -81,7 +97,6 @@ public class JobSubmissionFragment extends BasePortalListFragment
     {
         TextView detailTxt = (TextView) rootView.findViewById(R.id.jobDetailsTextView);
         TextView titleTxt = (TextView) rootView.findViewById(R.id.headlineEditText);
-        final Job job = new Job();
         job.setTargets(listPortal);
         job.setTitle(titleTxt.getText().toString());
         job.setDetails(detailTxt.getText().toString());
@@ -156,4 +171,11 @@ public class JobSubmissionFragment extends BasePortalListFragment
         setRetainInstance(true);
     }
 
+    public Job getJob() {
+        return job;
+    }
+
+    public void setJob(Job job) {
+        this.job = job;
+    }
 }

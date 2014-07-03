@@ -104,7 +104,7 @@ public class JobListFragment extends ListFragment implements LocationActivity.On
             case R.id.action_submit:
 
                 Fragment fragment = new JobSubmissionFragment();
-                ((MainActivity) getActivity()).switchFragments(fragment, false, true);
+                ((MainActivity) getActivity()).switchFragments(fragment, true, true);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
