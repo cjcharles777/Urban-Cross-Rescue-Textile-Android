@@ -62,22 +62,13 @@ public class JobListFragment extends ListFragment implements LocationActivity.On
         jobService = new JobService();
         final MainActivity main = (MainActivity) getActivity();
         agent = ((BlackOpsApplication) main.getApplication()).getSessionAgent();
-        BaseRestPostAction baseRestPostAction = new BaseRestPostAction()
+        BaseRestPostAction baseRestPostAction = new BaseRestPostAction(this.getActivity())
         {
             @Override
-            public void onPostExecution(String str) {
+            public void onSuccess(BaseResponse response)
+            {
                 List results = new ArrayList<Job>();
-                BaseResponse response = JsonResponseConversionUtil.convertToResponse(str);
-                if(response.getResult().equals("SUCCESS"))
-                {
-
-                    results = (List<Job>) JsonResponseConversionUtil.convertMessageToObjectList(response.getMessage(), new TypeToken<List<Job>>(){});
-
-                }
-                else
-                {
-                    Toast.makeText(main,  "There has been an issue with retrieving jobs. Please try later.", Toast.LENGTH_LONG).show();
-                }
+                results = (List<Job>) JsonResponseConversionUtil.convertMessageToObjectList(response.getMessage(), new TypeToken<List<Job>>(){});
                 mAdapter = new TargetListArrayAdapter(main, android.R.id.list, results, (LocationActivity)getActivity());
                 listView.setAdapter(mAdapter);
             }

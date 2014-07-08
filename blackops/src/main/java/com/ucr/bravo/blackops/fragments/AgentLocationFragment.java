@@ -162,23 +162,16 @@ public class AgentLocationFragment extends Fragment {
                 new BigDecimal(latLngBounds.southwest.latitude),
                 new BigDecimal(latLngBounds.northeast.longitude),
                 new BigDecimal(latLngBounds.southwest.longitude));
-        final BaseRestPostAction baseRestPostAction = new BaseRestPostAction()
+        final BaseRestPostAction baseRestPostAction = new BaseRestPostAction(this.getActivity())
         {
             @Override
-            public void onPostExecution(String str) {
-                BaseResponse response = JsonResponseConversionUtil.convertToResponse(str);
-                if(response.getResult().equals("SUCCESS"))
-                {
-                    List<AgentLocation> results = (List<AgentLocation>) JsonResponseConversionUtil.convertMessageToObjectList(response.getMessage(),
-                            new TypeToken<List<AgentLocation>>(){});
-                    insertIntoMap(results);
-                    Log.d(LocationUtils.APPTAG, "Grabbed Agent Locations");
-                    //startActivity(intent);
-                }
-                else
-                {
-                    Toast.makeText(getActivity(), str, Toast.LENGTH_LONG).show();
-                }
+            public void onSuccess(BaseResponse response)
+            {
+                List<AgentLocation> results = (List<AgentLocation>) JsonResponseConversionUtil.convertMessageToObjectList(response.getMessage(),
+                        new TypeToken<List<AgentLocation>>(){});
+                insertIntoMap(results);
+                Log.d(LocationUtils.APPTAG, "Grabbed Agent Locations");
+                //startActivity(intent);
 
             }
         };

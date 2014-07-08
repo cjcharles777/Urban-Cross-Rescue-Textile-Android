@@ -146,10 +146,15 @@ public class JobReviewFragment extends BasePortalListFragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        MenuItem item =
-                menu.add(Menu.NONE, R.id.action_edit, 10,R.string.edit_target);
-        item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-        item.setIcon(R.drawable.ic_action_edit);
+        final MainActivity main = (MainActivity) getActivity();
+        Agent agent = ((BlackOpsApplication) main.getApplication()).getSessionAgent();
+        if(job.getRequester().getId().equals(agent.getId()))
+        {
+            MenuItem item =
+                    menu.add(Menu.NONE, R.id.action_edit, 10, R.string.edit_target);
+            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+            item.setIcon(R.drawable.ic_action_edit);
+        }
 
     }
     private void acceptJob()
@@ -157,20 +162,15 @@ public class JobReviewFragment extends BasePortalListFragment {
 
 
 
-        final BaseRestPostAction baseRestPostAction = new BaseRestPostAction()
+        final BaseRestPostAction baseRestPostAction = new BaseRestPostAction(this.getActivity())
         {
+
+
             @Override
-            public void onPostExecution(String str) {
-                BaseResponse response = JsonResponseConversionUtil.convertToResponse(str);
-                if(response.getResult().equals("SUCCESS"))
-                {
-                    MainActivity main = ((MainActivity) getActivity());
-                    main.selectItem(2);
-                }
-                else
-                {
-                    Toast.makeText(getActivity(), getString(R.string.request_error), Toast.LENGTH_LONG).show();
-                }
+            public void onSuccess(BaseResponse response)
+            {
+                MainActivity main = ((MainActivity) getActivity());
+                main.selectItem(2);
 
             }
         };

@@ -100,21 +100,14 @@ public class JobSubmissionFragment extends BasePortalListFragment
         job.setTargets(listPortal);
         job.setTitle(titleTxt.getText().toString());
         job.setDetails(detailTxt.getText().toString());
-        final BaseRestPostAction baseRestPostAction = new BaseRestPostAction()
+        final BaseRestPostAction baseRestPostAction = new BaseRestPostAction(this.getActivity())
         {
-            @Override
-            public void onPostExecution(String str) {
-                BaseResponse response = JsonResponseConversionUtil.convertToResponse(str);
-                if(response.getResult().equals("SUCCESS")) 
-                {
-                    MainActivity main = ((MainActivity) getActivity());
-                    main.selectItem(2);
-                }
-                else
-                {
-                    Toast.makeText(getActivity(),getString(R.string.request_error), Toast.LENGTH_LONG).show();
-                }
 
+            @Override
+            public void onSuccess(BaseResponse response)
+            {
+                MainActivity main = ((MainActivity) getActivity());
+                main.selectItem(2);
             }
         };
 

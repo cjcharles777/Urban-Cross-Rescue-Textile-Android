@@ -31,7 +31,7 @@ public class PortalListSelectionFragment extends Fragment
 
     private AutoCompleteTextView actv;
     Portal selected;
-    ArrayList<Portal> listPortal = new ArrayList<Portal>();
+    List<Portal> listPortal = new ArrayList<Portal>();
     //ArrayList<String> listItems = new ArrayList<String>();
     ArrayAdapter<Portal> adapter;
     private PortalListListener mCallback;
@@ -102,7 +102,7 @@ public class PortalListSelectionFragment extends Fragment
             // Set article based on argument passed in
             if(listPortal == null)
             {
-                new ArrayList<Portal>();
+                listPortal = new ArrayList<Portal>();
             }
             listPortal.clear();
             List<Portal> temp = mCallback.retrieveCurrentPortalList();;
@@ -146,4 +146,11 @@ public class PortalListSelectionFragment extends Fragment
         }
     }
 
+    public List<Portal> getListPortal() {
+        return listPortal;
+    }
+
+    public void setListPortal(List<Portal> listPortal) {
+        this.listPortal = listPortal;
+    }
 }

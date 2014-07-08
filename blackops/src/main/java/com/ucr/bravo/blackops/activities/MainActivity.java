@@ -161,19 +161,12 @@ protected void onCreate(Bundle savedInstanceState) {
         final AgentLocation agentLocation = new AgentLocation();
         agentLocation.setLatitude(new BigDecimal(location.getLatitude()));
         agentLocation.setLongitude(new BigDecimal(location.getLongitude()));
-        final BaseRestPostAction baseRestPostAction = new BaseRestPostAction()
+        final BaseRestPostAction baseRestPostAction = new BaseRestPostAction(this)
         {
-            @Override
-            public void onPostExecution(String str) {
-                //BaseResponse response = JsonResponseConversionUtil.convertToResponse(str);
-               // if(response.getResult().equals("SUCCESS"))
-                //{
 
-                //}
-                //else
-               // {
-                    //Toast.makeText(getApplicationContext(), str, Toast.LENGTH_LONG).show();
-              //  }
+
+            @Override
+            public void onSuccess(BaseResponse response) {
 
             }
         };
@@ -341,10 +334,10 @@ protected void onCreate(Bundle savedInstanceState) {
         //      getSupportFragmentManager().findFragmentById(R.id.article_fragment);
 
         PortalListSelectionFragment plistFragment = new PortalListSelectionFragment();
-        Bundle args = new Bundle();
+       // Bundle args = new Bundle();
         // args.putParcelableArrayList(PortalListSelectionFragment.ARG_PORTAL_LIST, (ArrayList<Portal>)pList);
         //plistFragment.setArguments(args);
-
+        plistFragment.setListPortal(pList);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         // Replace whatever is in the fragment_container view with this fragment,
         // and add the transaction to the back stack so the user can navigate back

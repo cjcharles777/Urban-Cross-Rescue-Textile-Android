@@ -17,6 +17,7 @@ import com.ucr.bravo.blackops.R;
 import com.ucr.bravo.blackops.activities.MainActivity;
 import com.ucr.bravo.blackops.rest.BaseRestPostAction;
 import com.ucr.bravo.blackops.rest.object.beans.Agent;
+import com.ucr.bravo.blackops.rest.object.response.BaseResponse;
 import com.ucr.bravo.blackops.rest.service.AgentService;
 
 /**
@@ -55,12 +56,16 @@ public class AccessRequestFragment extends Fragment
                     agent.setEmail(emailTxt.getText().toString());
                     agent.setIgn(ignTxt.getText().toString());
                     agent.setGoogleID(gid);
-                    BaseRestPostAction baseRestPostAction = new BaseRestPostAction() {
+                    BaseRestPostAction baseRestPostAction = new BaseRestPostAction(getActivity()) {
                         @Override
-                        public void onPostExecution(String str) {
-                            Toast.makeText(getActivity(), str, Toast.LENGTH_LONG).show();
+                        public void onSuccess(BaseResponse response) {
+                            Toast.makeText(getActivity(), response.toString(), Toast.LENGTH_LONG).show();
 
                         }
+
+
+
+
                     };
                     agentService.requestAuthorization(baseRestPostAction, agent);
                 }
