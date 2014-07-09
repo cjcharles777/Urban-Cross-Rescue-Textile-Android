@@ -78,23 +78,14 @@
             android:layout_alignEnd="@+id/detailsTextView"
             android:layout_marginTop="30dp" />
 
-        <Button
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/add_string"
             android:id="@+id/viewPortalsButton"
+            android:contentDescription="@string/add_string"
+            android:src="@drawable/ic_action_add_to_queue"
             android:layout_below="@+id/portalTextView"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/submit_job_text"
-            android:id="@+id/acceptJobButton"
-            android:layout_below="@+id/jobDetailsTextView"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="72dp" />
-
 
     </RelativeLayout>

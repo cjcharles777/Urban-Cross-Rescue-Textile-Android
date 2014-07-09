@@ -70,7 +70,9 @@ public class JobListFragment extends ListFragment implements LocationActivity.On
                 List results = new ArrayList<Job>();
                 results = (List<Job>) JsonResponseConversionUtil.convertMessageToObjectList(response.getMessage(), new TypeToken<List<Job>>(){});
                 mAdapter = new TargetListArrayAdapter(main, android.R.id.list, results, (LocationActivity)getActivity());
+
                 listView.setAdapter(mAdapter);
+                mAdapter.sort();
             }
         };
 

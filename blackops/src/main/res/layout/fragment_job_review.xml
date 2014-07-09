@@ -82,31 +82,25 @@
         android:text="@string/sample_job_detail_text"
         android:textAppearance="?android:attr/textAppearanceMedium"/>
 
-    <Button
+    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/view_text"
+        android:contentDescription="@string/view_text"
         android:id="@+id/viewPortalsButton"
+        android:src="@drawable/ic_action_view_as_list"
         android:layout_below="@+id/portalTextView"
         android:layout_toLeftOf="@+id/viewMapbutton" />
 
-    <Button
+    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/accept_job_text"
-        android:id="@+id/acceptJobButton"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/string_map"
         android:id="@+id/viewMapbutton"
+        android:contentDescription="@string/string_map"
+        android:src="@drawable/ic_action_map"
         android:layout_above="@+id/detailsTextView"
-        android:layout_alignRight="@+id/detailsTextView"
-        android:layout_alignEnd="@+id/detailsTextView" />
-
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/viewPortalsButton" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

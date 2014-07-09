@@ -18,6 +18,7 @@ import com.ucr.bravo.blackops.utils.LocationUtils;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -49,7 +50,7 @@ public class TargetListArrayAdapter extends ArrayAdapter<Job>
         TextView portalNamesTextView = (TextView) rowView.findViewById(R.id.portalNamesTextView);
         TextView requesterNameTextView = (TextView) rowView.findViewById(R.id.requesterNameTextView);
         TextView distanceTextView = (TextView) rowView.findViewById(R.id.distanceTextView);
-        Location location = activity.getLocation();
+
 
         //ImageView imageView = (ImageView) rowView.findViewById(R.id.logo);
         Job posJob = getItem(position);
@@ -68,6 +69,34 @@ public class TargetListArrayAdapter extends ArrayAdapter<Job>
         {
             requesterNameTextView.setText("_ADA_");
         }
+
+
+        DecimalFormat df = new DecimalFormat();
+
+        df.setMaximumFractionDigits(2);
+
+        df.setMinimumFractionDigits(2);
+
+        df.setGroupingUsed(false);
+        BigDecimal minDistance = getMinDistanceFromUser(portals);
+        distanceTextView.setText(df.format(minDistance) + " km");
+        return rowView;
+    }
+
+    public void sort()
+    {
+       super.sort(new Comparator<Job>() {
+            @Override
+            public int compare(Job item1, Job item2) {
+                return getMinDistanceFromUser(item1.getTargets()).compareTo(getMinDistanceFromUser(item2.getTargets()));
+            }
+        });
+
+    }
+
+    private BigDecimal getMinDistanceFromUser(List<Portal> portals)
+    {
+        Location location = ((LocationActivity)getContext()).getLocation();
         BigDecimal minDistance = new BigDecimal(Float.MAX_VALUE);
         if (portals.size() > 0)
         {
@@ -91,33 +120,7 @@ public class TargetListArrayAdapter extends ArrayAdapter<Job>
         }
         minDistance = minDistance.setScale(2, BigDecimal.ROUND_HALF_UP);
 
-        DecimalFormat df = new DecimalFormat();
-
-        df.setMaximumFractionDigits(2);
-
-        df.setMinimumFractionDigits(2);
-
-        df.setGroupingUsed(false);
-        distanceTextView.setText(df.format(minDistance) + " km");
-        
-
-        // Change icon based on name
-/**
-        String s = values[position];
-
-        System.out.println(s);
-
-        if (s.equals("WindowsMobile")) {
-            imageView.setImageResource(R.drawable.windowsmobile_logo);
-        } else if (s.equals("iOS")) {
-            imageView.setImageResource(R.drawable.ios_logo);
-        } else if (s.equals("Blackberry")) {
-            imageView.setImageResource(R.drawable.blackberry_logo);
-        } else {
-            imageView.setImageResource(R.drawable.android_logo);
-        }
-**/
-        return rowView;
+        return minDistance;
     }
 
 }

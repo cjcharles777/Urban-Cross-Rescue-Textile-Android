@@ -8,15 +8,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import com.ucr.bravo.blackops.R;
 
+import com.ucr.bravo.blackops.R;
 import com.ucr.bravo.blackops.activities.LocationActivity;
 import com.ucr.bravo.blackops.adapters.PortalListArrayAdapter;
-import com.ucr.bravo.blackops.fragments.dummy.DummyContent;
 import com.ucr.bravo.blackops.listeners.PortalListListener;
 import com.ucr.bravo.blackops.rest.object.beans.Portal;
 
@@ -26,7 +24,7 @@ import java.util.List;
 public class PortalListReviewFragment extends Fragment implements AbsListView.OnItemClickListener {
 
     private ArrayList<Portal> listPortal = new ArrayList<Portal>();
-    private ArrayAdapter<Portal> adapter;
+    private PortalListArrayAdapter adapter;
 
 
     private PortalListListener mCallback;
@@ -77,8 +75,9 @@ public class PortalListReviewFragment extends Fragment implements AbsListView.On
 
         listPortal = (ArrayList<Portal>)mCallback.retrieveCurrentPortalList();
         View view = inflater.inflate(R.layout.fragment_portal, container, false);
-        adapter= new PortalListArrayAdapter(getActivity(), android.R.id.list, listPortal, (LocationActivity)getActivity());
+        adapter= new PortalListArrayAdapter(getActivity(), android.R.id.list, listPortal, (LocationActivity)getActivity(), false);
         ListView listview = (ListView) view.findViewById(android.R.id.list);
+        adapter.sort();
         listview.setAdapter(adapter);
         return view;
     }

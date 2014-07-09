@@ -3,5 +3,9 @@
 
     <item name="action_submit" type="id"/>
     <item name="action_edit" type="id" />
+    <item name="action_accept_job" type="id" />
+    <item name="action_submit_job" type="id" />
+    <item name="action_toggle_location" type="id" />
+    <item name="action_submit_portal_list" type="id" />
 
 </resources>
