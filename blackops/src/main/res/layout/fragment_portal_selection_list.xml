@@ -28,8 +28,7 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/portalAutoCompleteTextView"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_above="@+id/submitPortalListButton" />
+        android:layout_alignParentEnd="true" />
 
     <Button
         android:layout_width="wrap_content"
@@ -40,16 +39,5 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_alignBottom="@+id/portalAutoCompleteTextView" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/submit_target_text"
-        android:id="@+id/submitPortalListButton"
-        android:layout_alignParentBottom="true"
-        android:layout_alignRight="@+id/viewPortalsButton"
-        android:layout_alignEnd="@+id/viewPortalsButton"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
 
 </RelativeLayout>

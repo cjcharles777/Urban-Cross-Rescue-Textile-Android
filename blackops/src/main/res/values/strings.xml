@@ -9,7 +9,7 @@
     <string name="ingress_ign">Ingress IGN:</string>
     <string name="request_access">Request Access</string>
     <string name="default_email">you@email.com</string>
-    <string name="base_url"></string>
+    <string name="base_url">test.com</string>
     <string name="title_activity_target_list">Jobs</string>
     <string name="submit_target">Submit Target</string>
     <string name="administrator">Administrator</string>
@@ -49,8 +49,10 @@
     <string name="drawer_open">Open Drawer</string>
     <string name="drawer_close">Close Drawer</string>
     <string name="app_not_available">App Not Available</string>
-    <string name="on_text">ON</string>
-    <string name="off_text">OFF</string>
+    <string name="on_text">Location:ON</string>
+    <string name="off_text">Location: OFF</string>
     <string name="edit_target">Edit Job</string>
+    <string name="submit_portal_list_text">Submit Portal List</string>
+    <string name="string_remove_portal">Remove Portal</string>
 
 </resources>

@@ -73,22 +73,16 @@ public class PendingUserAcceptanceFragment extends Fragment
     public void onActivityCreated(Bundle savedInstanceState)
     {
         super.onActivityCreated(savedInstanceState);
-        BaseRestPostAction baseRestPostAction = new BaseRestPostAction()
+        BaseRestPostAction baseRestPostAction = new BaseRestPostAction(this.getActivity())
         {
+
             @Override
-            public void onPostExecution(String str) {
-                BaseResponse response = JsonResponseConversionUtil.convertToResponse(str);
-                if(response.getResult().equals("SUCCESS"))
-                {
-                    List results;
-                    results = (List<Agent>) JsonResponseConversionUtil.convertMessageToObjectList(response.getMessage(), new TypeToken<List<Agent>>(){});
-                    adapter = new UserSelectListArrayAdapter(getActivity(), android.R.id.list, results);
-                    listView.setAdapter(adapter);
-                }
-                else
-                {
-                    //Todo : What should be implemented upon failure.
-                }
+            public void onSuccess(BaseResponse response)
+            {
+                List results;
+                results = (List<Agent>) JsonResponseConversionUtil.convertMessageToObjectList(response.getMessage(), new TypeToken<List<Agent>>(){});
+                adapter = new UserSelectListArrayAdapter(getActivity(), android.R.id.list, results);
+                listView.setAdapter(adapter);
 
             }
         };

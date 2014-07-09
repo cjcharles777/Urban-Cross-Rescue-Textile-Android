@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -14,6 +17,8 @@ import android.widget.ListView;
 
 import com.ucr.bravo.blackops.BlackOpsApplication;
 import com.ucr.bravo.blackops.R;
+import com.ucr.bravo.blackops.activities.LocationActivity;
+import com.ucr.bravo.blackops.adapters.PortalListArrayAdapter;
 import com.ucr.bravo.blackops.adapters.PortalSearchArrayAdapter;
 import com.ucr.bravo.blackops.listeners.PortalListListener;
 import com.ucr.bravo.blackops.rest.object.beans.Portal;
@@ -30,8 +35,9 @@ public class PortalListSelectionFragment extends Fragment
 
 
     private AutoCompleteTextView actv;
+    private View rootView;
     Portal selected;
-    ArrayList<Portal> listPortal = new ArrayList<Portal>();
+    List<Portal> listPortal = new ArrayList<Portal>();
     //ArrayList<String> listItems = new ArrayList<String>();
     ArrayAdapter<Portal> adapter;
     private PortalListListener mCallback;
@@ -44,12 +50,20 @@ public class PortalListSelectionFragment extends Fragment
         // the previous article selection set by onSaveInstanceState().
         // This is primarily necessary when in the two-pane layout.
 
-            listPortal = mCallback.retrieveCurrentPortalList();
 
 
 
-        View rootView = inflater.inflate(R.layout.fragment_portal_selection_list, container, false);
 
+        rootView = inflater.inflate(R.layout.fragment_portal_selection_list, container, false);
+        setHasOptionsMenu(true);
+        return rootView;
+    }
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState)
+    {
+
+        super.onActivityCreated(savedInstanceState);
+        listPortal = mCallback.retrieveCurrentPortalList();
         actv = (AutoCompleteTextView) rootView.findViewById(R.id.portalAutoCompleteTextView);
         actv.setAdapter(new PortalSearchArrayAdapter(getActivity(), ((BlackOpsApplication) getActivity().getApplication()).getRequesterId()));
         actv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -63,7 +77,8 @@ public class PortalListSelectionFragment extends Fragment
                 // adapter.notifyDataSetChanged();
             }
         });
-        adapter=new ArrayAdapter<Portal>(getActivity(),android.R.layout.simple_list_item_1,listPortal);
+
+        adapter= new PortalListArrayAdapter(getActivity(), android.R.id.list, listPortal, (LocationActivity)getActivity(), true);
         ListView listview = (ListView) rootView.findViewById(android.R.id.list);
         listview.setAdapter(adapter);
 
@@ -73,22 +88,41 @@ public class PortalListSelectionFragment extends Fragment
             {
                 if(selected != null)
                 {
-                    listPortal.add(selected);
-                    adapter.notifyDataSetChanged();
-                    actv.setText("");
-                    selected = null;
+                    addPortal();
                 }
             }
         });
-        Button button2 = (Button) rootView.findViewById(R.id.submitPortalListButton);
-        button2.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v)
-            {
-                    mCallback.onSubmitPortalsListButtonPressed(listPortal);
-            }
-        });
 
-        return rootView;
+    }
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        MenuItem item = menu.add(Menu.NONE, R.id.action_submit_portal_list, 10, R.string.submit_portal_list_text);
+        item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+        item.setIcon(R.drawable.ic_action_save);
+
+
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // handle item selection
+        switch (item.getItemId()) {
+            case R.id.action_submit_portal_list:
+                mCallback.onSubmitPortalsListButtonPressed(listPortal);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+    private void addPortal()
+    {
+        listPortal.add(selected);
+        adapter.notifyDataSetChanged();
+        actv.setText("");
+        selected = null;
+    }
+    private void removePortal()
+    {
+
     }
     @Override
     public void onStart() {
@@ -102,10 +136,10 @@ public class PortalListSelectionFragment extends Fragment
             // Set article based on argument passed in
             if(listPortal == null)
             {
-                new ArrayList<Portal>();
+                listPortal = new ArrayList<Portal>();
             }
             listPortal.clear();
-            List<Portal> temp = mCallback.retrieveCurrentPortalList();;
+            List<Portal> temp = mCallback.retrieveCurrentPortalList();
            if(temp != null)
            {
                listPortal.addAll(temp);
@@ -146,4 +180,11 @@ public class PortalListSelectionFragment extends Fragment
         }
     }
 
+    public List<Portal> getListPortal() {
+        return listPortal;
+    }
+
+    public void setListPortal(List<Portal> listPortal) {
+        this.listPortal = listPortal;
+    }
 }

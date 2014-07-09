@@ -10,10 +10,10 @@ import android.support.v4.app.Fragment;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.Toast;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.maps.CameraUpdate;
@@ -41,17 +41,17 @@ import com.ucr.bravo.blackops.rest.utils.NetworkCommunicationUtil;
 import com.ucr.bravo.blackops.utils.LocationUtils;
 
 import java.math.BigDecimal;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 
 public class AgentLocationFragment extends Fragment {
+
+    private View rootView;
     private MapView mapView;
     private GoogleMap map;
-    private boolean mUpdatesRequested;
+
     private AppLocationListener mCallback;
     private AgentService agentService = new AgentService();
     Handler handler;
@@ -83,12 +83,19 @@ public class AgentLocationFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Context context = getActivity();
-        final SharedPreferences sharedPref = context.getSharedPreferences(LocationUtils.SHARED_PREFERENCES, Context.MODE_PRIVATE);
+
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_agent_location, container, false);
+        rootView = inflater.inflate(R.layout.fragment_agent_location, container, false);
+        setHasOptionsMenu(true);
+        return rootView;
+
+    }
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState)
+    {
+        super.onActivityCreated(savedInstanceState);
         // Gets the MapView from the XML layout and creates it
-        mapView = (MapView) v.findViewById(R.id.mapview);
+        mapView = (MapView) rootView.findViewById(R.id.mapview);
         mapView.onCreate(savedInstanceState);
 
         // Gets to GoogleMap from the MapView and does initialization stuff
@@ -109,8 +116,59 @@ public class AgentLocationFragment extends Fragment {
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(loc.getLatitude(),loc.getLongitude()), 10);
         map.animateCamera(cameraUpdate);
 
+        getAgentLocations();
+        startLocationUpdater();
+    }
+    @Override
+    public void onPrepareOptionsMenu(Menu menu)
+    {
+        changeLocationIcon(menu);
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // handle item selection
+        switch (item.getItemId()) {
+            case R.id.action_toggle_location:
+                toggleLocation();
+                getActivity().invalidateOptionsMenu();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
+    private void changeLocationIcon(Menu menu)
+    {
+        String onOffString = (isLocationSharing())?getActivity().getString(R.string.on_text):getActivity().getString(R.string.off_text);
+        int onOffIcon =  (isLocationSharing())?R.drawable.ic_action_location_found:R.drawable.ic_action_location_off;
+        MenuItem item = menu.add(Menu.NONE, R.id.action_toggle_location, 10, onOffString);
+        item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+        item.setIcon(onOffIcon);
+    }
+    private void toggleLocation()
+    {
+        boolean mUpdatesRequested;
+        mUpdatesRequested = !isLocationSharing();
+        Context context = getActivity();
+        final SharedPreferences sharedPref = context.getSharedPreferences(LocationUtils.SHARED_PREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();// Todo: move to Location activity something like toggle UpdateRequested
+        editor.putBoolean("KEY_UPDATES_ON", mUpdatesRequested);
+        editor.commit();
+        if(mUpdatesRequested)
+        {
+            mCallback.startUpdates();
+        }
+        else
+        {
+            mCallback.stopUpdates();
+        }
+    }
+    private boolean isLocationSharing()
+    {
+        boolean mUpdatesRequested;
 
+        Context context = getActivity();
+        final SharedPreferences sharedPref = context.getSharedPreferences(LocationUtils.SHARED_PREFERENCES, Context.MODE_PRIVATE);
         if (sharedPref.contains("KEY_UPDATES_ON"))
         {
             mUpdatesRequested =
@@ -125,36 +183,9 @@ public class AgentLocationFragment extends Fragment {
             editor.putBoolean("KEY_UPDATES_ON", mUpdatesRequested);
             editor.commit();
         }
-        String onOffString = (mUpdatesRequested)?getActivity().getString(R.string.on_text):getActivity().getString(R.string.off_text);
-        final Button viewLocationSharingButton = (Button) v.findViewById(R.id.location_sharing_button);
-        viewLocationSharingButton.setText(onOffString);
-        viewLocationSharingButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-
-                mUpdatesRequested = !mUpdatesRequested;
-                String onOffString = (mUpdatesRequested) ? getActivity().getString(R.string.on_text) : getActivity().getString(R.string.off_text);
-                viewLocationSharingButton.setText(onOffString);
-                SharedPreferences.Editor editor = sharedPref.edit();// Todo: move to Location activity something like toggle UpdateRequested
-                editor.putBoolean("KEY_UPDATES_ON", mUpdatesRequested);
-                editor.commit();
-                if(mUpdatesRequested)
-                {
-                    mCallback.startUpdates();
-                }
-                else
-                {
-                    mCallback.stopUpdates();
-                }
-
-            }
-        });
-
-        getAgentLocations();
-        startLocationUpdater();
-
-        return v;
-
+        return mUpdatesRequested;
     }
+
     private void getAgentLocations()
     {
         LatLngBounds latLngBounds = map.getProjection().getVisibleRegion().latLngBounds;
@@ -162,23 +193,16 @@ public class AgentLocationFragment extends Fragment {
                 new BigDecimal(latLngBounds.southwest.latitude),
                 new BigDecimal(latLngBounds.northeast.longitude),
                 new BigDecimal(latLngBounds.southwest.longitude));
-        final BaseRestPostAction baseRestPostAction = new BaseRestPostAction()
+        final BaseRestPostAction baseRestPostAction = new BaseRestPostAction(this.getActivity())
         {
             @Override
-            public void onPostExecution(String str) {
-                BaseResponse response = JsonResponseConversionUtil.convertToResponse(str);
-                if(response.getResult().equals("SUCCESS"))
-                {
-                    List<AgentLocation> results = (List<AgentLocation>) JsonResponseConversionUtil.convertMessageToObjectList(response.getMessage(),
-                            new TypeToken<List<AgentLocation>>(){});
-                    insertIntoMap(results);
-                    Log.d(LocationUtils.APPTAG, "Grabbed Agent Locations");
-                    //startActivity(intent);
-                }
-                else
-                {
-                    Toast.makeText(getActivity(), str, Toast.LENGTH_LONG).show();
-                }
+            public void onSuccess(BaseResponse response)
+            {
+                List<AgentLocation> results = (List<AgentLocation>) JsonResponseConversionUtil.convertMessageToObjectList(response.getMessage(),
+                        new TypeToken<List<AgentLocation>>(){});
+                insertIntoMap(results);
+                Log.d(LocationUtils.APPTAG, "Grabbed Agent Locations");
+                //startActivity(intent);
 
             }
         };

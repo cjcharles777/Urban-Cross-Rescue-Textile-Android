@@ -141,49 +141,47 @@ public class GPlusLoginFragment extends Fragment implements
 
             final Agent agent = new Agent();
             agent.setGoogleID(gid);
-            BaseRestPostAction baseRestPostAction = new BaseRestPostAction()
+            BaseRestPostAction baseRestPostAction = new BaseRestPostAction(this.getActivity())
             {
+
                 @Override
-                public void onPostExecution(String str)
+                public void onSuccess(BaseResponse response)
                 {
-                    BaseResponse response = JsonResponseConversionUtil.convertToResponse(str);
-                    if(response.getResult().equals("SUCCESS"))
+
+                    Agent responseAgent = (Agent) JsonResponseConversionUtil.convertMessageToObject(response.getMessage(), Agent.class);
+                    if(responseAgent.getAuthorized())
                     {
+                        //Toast.makeText(getActivity(), responseAgent.getId(), Toast.LENGTH_LONG).show();
+                        ((BlackOpsApplication) getActivity().getApplication()).setSessionAgent(responseAgent);
 
-                        Agent responseAgent = (Agent) JsonResponseConversionUtil.convertMessageToObject(response.getMessage(), Agent.class);
-                        if(responseAgent.getAuthorized())
-                        {
-                            //Toast.makeText(getActivity(), responseAgent.getId(), Toast.LENGTH_LONG).show();
-                            ((BlackOpsApplication) getActivity().getApplication()).setSessionAgent(responseAgent);
-
-                            MainActivity main = ((MainActivity) getActivity());
-                            main.selectItem(2);
-
-                        }
-                        else
-                        {
-                            //Todo: Go to please wait for authentication page
-                        }
+                        MainActivity main = ((MainActivity) getActivity());
+                        main.selectItem(2);
 
                     }
                     else
                     {
-                        String resultMessage = (String) response.getMessage();
-                        if(resultMessage.equals("Invalid Google ID"))
-                        {
-                            Intent intent = new Intent(getActivity(), AccessRequestActivity.class);
-                            String message = email;
-                            intent.putExtra(((MainActivity) getActivity()).EXTRA_MESSAGE, message);
-                            intent.putExtra(((MainActivity) getActivity()).EXTRA_GID, gid);
-                            startActivity(intent);
-
-                        }
-                        else
-                        {
-                            Toast.makeText(getActivity(), resultMessage, Toast.LENGTH_LONG).show();
-                        }
+                        //Todo: Go to please wait for authentication page
                     }
                 }
+                @Override
+                public void onFailure(BaseResponse response)
+                {
+                    String resultMessage = (String) response.getMessage();
+                    if(resultMessage.equals("Invalid Google ID"))
+                    {
+                        Intent intent = new Intent(getActivity(), AccessRequestActivity.class);
+                        String message = email;
+                        intent.putExtra(((MainActivity) getActivity()).EXTRA_MESSAGE, message);
+                        intent.putExtra(((MainActivity) getActivity()).EXTRA_GID, gid);
+                        startActivity(intent);
+
+                    }
+                    else
+                    {
+                        Toast.makeText(getActivity(), resultMessage, Toast.LENGTH_LONG).show();
+                    }
+                }
+
             };
             agentService.retrieveAgentByGID(baseRestPostAction, agent);
         }

@@ -1,26 +1,24 @@
 package com.ucr.bravo.blackops.fragments;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ucr.bravo.blackops.BlackOpsApplication;
 import com.ucr.bravo.blackops.R;
-
 import com.ucr.bravo.blackops.activities.MainActivity;
 import com.ucr.bravo.blackops.rest.BaseRestPostAction;
 import com.ucr.bravo.blackops.rest.object.beans.Job;
 import com.ucr.bravo.blackops.rest.object.beans.Portal;
 import com.ucr.bravo.blackops.rest.object.response.BaseResponse;
 import com.ucr.bravo.blackops.rest.service.JobService;
-import com.ucr.bravo.blackops.rest.utils.JsonResponseConversionUtil;
 import com.ucr.bravo.blackops.rest.utils.NetworkCommunicationUtil;
 
 import java.util.ArrayList;
@@ -49,11 +47,17 @@ public class JobSubmissionFragment extends BasePortalListFragment
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState)
-    {
+                             Bundle savedInstanceState) {
 
         rootView = inflater.inflate(R.layout.fragment_job_submission, container, false);
+        setHasOptionsMenu(true);
 
+        return rootView;
+    }
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState)
+    {
+        super.onActivityCreated(savedInstanceState);
         if(job != null)
         {
             listPortal = job.getTargets();
@@ -74,25 +78,36 @@ public class JobSubmissionFragment extends BasePortalListFragment
 
 
 
-        Button addButton = (Button) rootView.findViewById(R.id.viewPortalsButton);
+        ImageView addButton = (ImageView) rootView.findViewById(R.id.viewPortalsButton);
         addButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 mCallback.onAddButtonPressed(listPortal);
             }
         });
 
-        Button submitButton = (Button) rootView.findViewById(R.id.acceptJobButton);
-        submitButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                submitJob();
-            }
-        });
-
         TextView numOfPortalsTextView = (TextView) rootView.findViewById(R.id.numOfPortalsTextView);
         numOfPortalsTextView.setText(listPortal.size() + "Portals");
-        return rootView;
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        MenuItem item = menu.add(Menu.NONE, R.id.action_submit_job, 10, R.string.submit_job_text);
+        item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+        item.setIcon(R.drawable.ic_action_save);
+
+
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // handle item selection
+        switch (item.getItemId()) {
+            case R.id.action_submit_job:
+                submitJob();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
     private void submitJob()
     {
         TextView detailTxt = (TextView) rootView.findViewById(R.id.jobDetailsTextView);
@@ -100,21 +115,14 @@ public class JobSubmissionFragment extends BasePortalListFragment
         job.setTargets(listPortal);
         job.setTitle(titleTxt.getText().toString());
         job.setDetails(detailTxt.getText().toString());
-        final BaseRestPostAction baseRestPostAction = new BaseRestPostAction()
+        final BaseRestPostAction baseRestPostAction = new BaseRestPostAction(this.getActivity())
         {
-            @Override
-            public void onPostExecution(String str) {
-                BaseResponse response = JsonResponseConversionUtil.convertToResponse(str);
-                if(response.getResult().equals("SUCCESS")) 
-                {
-                    MainActivity main = ((MainActivity) getActivity());
-                    main.selectItem(2);
-                }
-                else
-                {
-                    Toast.makeText(getActivity(),getString(R.string.request_error), Toast.LENGTH_LONG).show();
-                }
 
+            @Override
+            public void onSuccess(BaseResponse response)
+            {
+                MainActivity main = ((MainActivity) getActivity());
+                main.selectItem(2);
             }
         };
 
