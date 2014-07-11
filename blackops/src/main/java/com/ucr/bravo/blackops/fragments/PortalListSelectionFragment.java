@@ -63,7 +63,7 @@ public class PortalListSelectionFragment extends Fragment
     {
 
         super.onActivityCreated(savedInstanceState);
-        listPortal = mCallback.retrieveCurrentPortalList();
+        //listPortal = mCallback.retrieveCurrentPortalList();
         actv = (AutoCompleteTextView) rootView.findViewById(R.id.portalAutoCompleteTextView);
         actv.setAdapter(new PortalSearchArrayAdapter(getActivity(), ((BlackOpsApplication) getActivity().getApplication()).getRequesterId()));
         actv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
