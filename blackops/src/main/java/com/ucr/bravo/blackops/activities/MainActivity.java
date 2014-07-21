@@ -334,9 +334,6 @@ protected void onCreate(Bundle savedInstanceState) {
         //      getSupportFragmentManager().findFragmentById(R.id.article_fragment);
 
         PortalListSelectionFragment plistFragment = new PortalListSelectionFragment();
-       // Bundle args = new Bundle();
-        // args.putParcelableArrayList(PortalListSelectionFragment.ARG_PORTAL_LIST, (ArrayList<Portal>)pList);
-        //plistFragment.setArguments(args);
         plistFragment.setListPortal(pList);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         // Replace whatever is in the fragment_container view with this fragment,

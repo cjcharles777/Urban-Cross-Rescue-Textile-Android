@@ -60,7 +60,7 @@ public class JobSubmissionFragment extends BasePortalListFragment
         super.onActivityCreated(savedInstanceState);
         if(job != null)
         {
-            listPortal = job.getTargets();
+            setListPortal(job.getTargets());
             TextView detailTxt = (TextView) rootView.findViewById(R.id.jobDetailsTextView);
             TextView titleTxt = (TextView) rootView.findViewById(R.id.headlineEditText);
             detailTxt.setText(job.getDetails());
@@ -73,7 +73,7 @@ public class JobSubmissionFragment extends BasePortalListFragment
         }
         if(listPortal == null)
         {
-            listPortal = new ArrayList<Portal>();
+            setListPortal(new ArrayList<Portal>());
         }
 
 
@@ -81,7 +81,7 @@ public class JobSubmissionFragment extends BasePortalListFragment
         ImageView addButton = (ImageView) rootView.findViewById(R.id.viewPortalsButton);
         addButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                mCallback.onAddButtonPressed(listPortal);
+                mCallback.onAddButtonPressed(getListPortal());
             }
         });
 
