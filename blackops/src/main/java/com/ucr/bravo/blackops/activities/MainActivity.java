@@ -334,7 +334,6 @@ protected void onCreate(Bundle savedInstanceState) {
         //      getSupportFragmentManager().findFragmentById(R.id.article_fragment);
 
         PortalListSelectionFragment plistFragment = new PortalListSelectionFragment();
-        plistFragment.setListPortal(pList);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         // Replace whatever is in the fragment_container view with this fragment,
         // and add the transaction to the back stack so the user can navigate back
@@ -350,12 +349,6 @@ protected void onCreate(Bundle savedInstanceState) {
     public void onSubmitPortalsListButtonPressed(List<Portal> pList)
     {
         BasePortalListFragment jobSubmissionFragment = firstFragment;
-        // In case this activity was started with special instructions from an
-        // Intent, pass the Intent's extras to the fragment as arguments
-        //Bundle args = new Bundle();
-        //args.putParcelableArrayList(PortalListSelectionFragment.ARG_PORTAL_LIST, (ArrayList<Portal>)pList);
-        //jobSubmissionFragment.setUIArguments(args);
-        // Add the fragment to the 'fragment_container' FrameLayout
         getSupportFragmentManager().popBackStack();
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.content_frame, jobSubmissionFragment).commit();

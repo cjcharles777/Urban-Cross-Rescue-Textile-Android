@@ -58,9 +58,14 @@ public class JobSubmissionFragment extends BasePortalListFragment
     public void onActivityCreated(Bundle savedInstanceState)
     {
         super.onActivityCreated(savedInstanceState);
+
         if(job != null)
         {
-            setListPortal(job.getTargets());
+
+            if(job.getTargets() != null && getListPortal() == null)
+            {
+                setListPortal(job.getTargets());
+            }
             TextView detailTxt = (TextView) rootView.findViewById(R.id.jobDetailsTextView);
             TextView titleTxt = (TextView) rootView.findViewById(R.id.headlineEditText);
             detailTxt.setText(job.getDetails());
@@ -71,8 +76,9 @@ public class JobSubmissionFragment extends BasePortalListFragment
             job = new Job();
             //job.setTargets(listPortal);
         }
-        if(listPortal == null)
+        if(getListPortal() == null)
         {
+
             setListPortal(new ArrayList<Portal>());
         }
 
@@ -86,7 +92,7 @@ public class JobSubmissionFragment extends BasePortalListFragment
         });
 
         TextView numOfPortalsTextView = (TextView) rootView.findViewById(R.id.numOfPortalsTextView);
-        numOfPortalsTextView.setText(listPortal.size() + "Portals");
+        numOfPortalsTextView.setText(getListPortal().size() + "Portals");
     }
 
     @Override
@@ -108,11 +114,12 @@ public class JobSubmissionFragment extends BasePortalListFragment
                 return super.onOptionsItemSelected(item);
         }
     }
+
     private void submitJob()
     {
         TextView detailTxt = (TextView) rootView.findViewById(R.id.jobDetailsTextView);
         TextView titleTxt = (TextView) rootView.findViewById(R.id.headlineEditText);
-        job.setTargets(listPortal);
+        job.setTargets(getListPortal());
         job.setTitle(titleTxt.getText().toString());
         job.setDetails(detailTxt.getText().toString());
         final BaseRestPostAction baseRestPostAction = new BaseRestPostAction(this.getActivity())
@@ -155,6 +162,7 @@ public class JobSubmissionFragment extends BasePortalListFragment
                     + " must implement OnAddPortalsListener");
         }
     }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -165,7 +173,7 @@ public class JobSubmissionFragment extends BasePortalListFragment
         Bundle args = getArguments();
         if (args != null) {
             // Set article based on argument passed in
-            listPortal = (args.getParcelableArrayList(ARG_PORTAL_LIST));
+            //listPortal = (args.getParcelableArrayList(ARG_PORTAL_LIST));
         }
 
     }

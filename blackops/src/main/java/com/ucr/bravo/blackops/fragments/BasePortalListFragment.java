@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * Created by cedric on 6/13/14.
  */
 public abstract class BasePortalListFragment extends Fragment {
-    protected ArrayList<Portal> listPortal;
+    private ArrayList<Portal> listPortal;
 
     public ArrayList<Portal> getListPortal() {
         return listPortal;
